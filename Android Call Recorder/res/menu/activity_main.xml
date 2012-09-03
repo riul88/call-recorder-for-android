@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_about"
+        android:title="@string/menu_about"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_about"
+         />
+    <item android:id="@+id/menu_Enable_record"
+        android:title="@string/menu_Enable_record"
+        android:orderInCategory="100"
+        android:enabled="false"
+        android:icon="@drawable/ic_record_enable" />
+    <item android:id="@+id/menu_Disable_record"
+        android:title="@string/menu_Disable_record"
+        android:orderInCategory="100"
+        android:enabled="false"
+        android:icon="@drawable/ic_record_disable" />
+</menu>

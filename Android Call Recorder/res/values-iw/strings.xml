@@ -1,0 +1,30 @@
+<resources>
+
+    <string name="app_name">מקליט שיחות לאנדרויד</string>
+    <string name="hello_world">שלום עולם</string>
+    <string name="menu_settings">כיוונים</string>
+    <string name="menu_about">אודות</string>
+    <string name="menu_Enable_record">אפשר הקלטה</string>
+    <string name="menu_Disable_record">מנע הקלטה</string>
+    <string name="title_activity_main">מקליט שיחות לאנדרויד</string>
+    <string name="list_play_your_recordeed_call">play your recorded call</string>
+	<string name="list_send_your_recordeed_call">send your recorded call</string>
+	<string name="list_erase_your_recordeed_call">erase your recorded call</string>
+	<string name="reciever_start_call">מתחיל הקלטה</string>
+	<string name="reciever_end_call">מסיים הקלטה</string>
+	<string name="confirm_delete_title">מסך התראה</string>
+	<string name="confirm_delete_text">האם אתה בטוח שברצונך למחוק הקלטה זאת?</string>
+	<string name="confirm_delete_yes">כן</string>
+	<string name="confirm_delete_no">לא</string>
+	<string name="options_title">בחר אופציה</string>
+	<string name="options_delete">מחק</string>
+	<string name="confirm_play">נגן</string>
+	<string name="confirm_send">שלח</string>
+	<string name="sendMail_subject">הקלטת שיחה ממכשיר הטלפון שלך</string>
+	<string name="sendMail_body">מצורף הקלטת שיחה ממכשיר הטלפון שלך</string>
+	<string name="about_title">אודות</string>
+	<string name="about_content">מקליט שיחות מאת קובי קרסנוב</string>
+	<string name="about_close_button">סגור</string>
+	<string name="send_mail">שלח דואר</string>
+	<string name="withheld_number">מספר חסוי</string>
+</resources>
