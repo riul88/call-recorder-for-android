@@ -1,4 +1,6 @@
 /*
+ *  Copyright 2012 Kobi Krasnoff
+ * 
  * This file is part of Call recorder For Android.
 
     Call recorder For Android is free software: you can redistribute it and/or modify
@@ -13,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Call recorder For Android.  If not, see <http://www.gnu.org/licenses/>
- */
+ */       
 package com.call.recorder;
 
 import java.io.File;

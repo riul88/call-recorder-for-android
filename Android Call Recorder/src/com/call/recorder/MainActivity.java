@@ -1,4 +1,6 @@
 /*
+ *  Copyright 2012 Kobi Krasnoff
+ * 
  * This file is part of Call recorder For Android.
 
     Call recorder For Android is free software: you can redistribute it and/or modify
