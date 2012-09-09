@@ -23,6 +23,7 @@ package com.call.recorder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import android.os.Bundle;
 import android.os.Environment;
@@ -76,14 +77,15 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		/*listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+		adapter.sort(new Comparator<Model>() {
 
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				adapter.showPromotionPieceDialog(ListDir2(file).get(position)
-						.getCallName(), position);
-				return false;
-			}});*/
+			public int compare(Model arg0, Model arg1) {
+				Long date1 = Long.valueOf(arg0.getCallName().substring(1, 15));
+				Long date2 = Long.valueOf(arg1.getCallName().substring(1, 15));
+				return (date1 > date2 ? -1 : (date1 == date2 ? 0 : 1));
+			}
+
+		});
     	
 		listView.setAdapter(adapter);
     	
