@@ -23,6 +23,7 @@ package com.call.recorder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import android.os.Bundle;
@@ -106,6 +107,8 @@ public class MainActivity extends Activity {
 			fileList.add(new Model(file.getName()));
 		}
 		
+		Collections.sort(fileList);
+        Collections.sort(fileList, Collections.reverseOrder());
 
 		return fileList;
 	}
