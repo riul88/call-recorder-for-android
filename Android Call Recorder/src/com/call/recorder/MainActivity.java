@@ -40,6 +40,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -143,7 +144,8 @@ public class MainActivity extends Activity {
 
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+		Toast toast;
+		switch (item.getItemId()) {
             case R.id.menu_about:
             	AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             	builder.setTitle(R.string.about_title)
@@ -157,10 +159,14 @@ public class MainActivity extends Activity {
             	break;
             case R.id.menu_Disable_record:
             	setSharedPreferences(false);
+            	toast = Toast.makeText(this, this.getString(R.string.menu_record_is_now_disabled), Toast.LENGTH_SHORT);
+		    	toast.show();
             	break;
             case R.id.menu_Enable_record:
             	setSharedPreferences(true);
             	//activateNotification();
+            	toast = Toast.makeText(this, this.getString(R.string.menu_record_is_now_enabled), Toast.LENGTH_SHORT);
+		    	toast.show();
             	break;
             default:
             	break;
