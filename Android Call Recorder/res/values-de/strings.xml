@@ -27,4 +27,7 @@
        <string name="about_close_button">Schließen</string>
        <string name="send_mail">E-Mail senden</string>
        <string name="withheld_number">Unterdrückt Anzahl</string>
+	   <string name="menu_record_is_now_enabled">Die Anwendung wird jetzt ermöglichen, Anrufe aufzeichnen</string>
+	   <string name="menu_record_is_now_disabled">Die Anwendung ist nun nicht zu ermöglichen, Anrufe aufzeichnen</string>
+	   <string name="no_records_message">Es gibt keine Aufnahmen in diesem Telefon.\nDamit Rekord Möglichkeit das Hauptmenü zu öffnen, und wählen Sie \"Enable Rekord\".\nDanach wird die Anwendung erfassen alle ankommenden und abgehenden Anrufe.</string>
 </resources>

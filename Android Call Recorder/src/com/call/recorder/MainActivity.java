@@ -40,6 +40,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -49,6 +51,8 @@ public class MainActivity extends Activity {
 	
 	public static final String FILE_DIRECTORY = "recordedCalls";
 	public ListView listView;
+	public ScrollView mScrollView;
+	public TextView mTextView;
 	public static final String LISTEN_ENABLED = "ListenEnabled";
 	
 	
@@ -58,6 +62,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
         listView = (ListView) findViewById(R.id.mylist);
+        mScrollView = (ScrollView) findViewById(R.id.ScrollView01);
+        mTextView = (TextView) findViewById(R.id.txtNoRecords);
     }
     
     @Override
@@ -68,13 +74,27 @@ public class MainActivity extends Activity {
 		if (!file.exists()) {
 			file.mkdirs();
 		}
-    	final MyCallsAdapter adapter = new MyCallsAdapter(this, ListDir2(file));
+		
+		final List<Model> listDir = ListDir2(file);
+		
+		if (listDir.isEmpty())
+		{
+			mTextView.setVisibility(TextView.VISIBLE);
+			mScrollView.setVisibility(ScrollView.GONE);
+		}
+		else
+		{
+			mTextView.setVisibility(TextView.GONE);
+			mScrollView.setVisibility(ScrollView.VISIBLE);
+		}
+		
+    	final MyCallsAdapter adapter = new MyCallsAdapter(this, listDir);
     	
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				adapter.showPromotionPieceDialog(ListDir2(file).get(position)
+				adapter.showPromotionPieceDialog(listDir.get(position)
 						.getCallName(), position);
 			}
 		});

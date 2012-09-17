@@ -27,6 +27,7 @@
 	<string name="about_close_button">Close</string>
 	<string name="send_mail">Send Mail</string>
 	<string name="withheld_number">Withheld Number</string>
-	<string name="menu_record_is_now_enabled">The application is enable to record calls</string>
-	<string name="menu_record_is_now_disabled">The application is not enable to record calls</string>
+	<string name="menu_record_is_now_enabled">The application is now enable to record calls</string>
+	<string name="menu_record_is_now_disabled">The application is now not enable to record calls</string>
+	<string name="no_records_message">There are no recordings in this phone.\nTo enable record ability open the main menu and choose \"Enable Record\".\nAfter that the application will record all your incoming and outgoing calls.</string>
 </resources>

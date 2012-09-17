@@ -27,5 +27,8 @@
        <string name="about_close_button">cerrar</string>
        <string name="send_mail">Enviar el correo</string>
        <string name="withheld_number">Número Retenido</string>
+       <string name="menu_record_is_now_enabled">La aplicación está ahora permiten grabar llamadas</string>
+	   <string name="menu_record_is_now_disabled">La aplicación no está habilitado ahora para grabar llamadas</string>
+	   <string name="no_records_message">No hay grabaciones en este teléfono.\nPara capacidad de activación para grabación abrir el menú principal y seleccione \"Habilitar registro\". \nUna que la aplicación registre todas las llamadas entrantes y salientes.</string>
 </resources>
  

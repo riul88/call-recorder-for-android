@@ -13,17 +13,19 @@
         <ListView
             android:id="@+id/mylist"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+            >
 
 	    </ListView>
 	    
     </ScrollView>
 
     <TextView
+        android:id="@+id/txtNoRecords"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="gone"
-        android:id="@+id/txtNoRecords" >
+        android:text="@string/no_records_message"
+         >
         
     </TextView>
 
