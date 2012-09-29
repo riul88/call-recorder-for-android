@@ -1,0 +1,33 @@
+<resources>
+
+    <string name="app_name">Android के लिए फोन रिकॉर्डर</string>
+    <string name="hello_world">दुनिया नमस्कार!</string>
+    <string name="menu_settings">सेटिंग्स</string>
+    <string name="menu_about">के बारे में</string>
+    <string name="menu_Enable_record">रिकॉर्ड सक्षम</string>
+    <string name="menu_Disable_record">रिकॉर्ड निष्क्रिय कर देते हैं</string>
+    <string name="title_activity_main">Android के लिए फोन रिकॉर्डर</string>
+    <string name="list_play_your_recordeed_call">अपने दर्ज की गई कॉल खेलने</string>
+	<string name="list_send_your_recordeed_call">अपने रिकॉर्ड कॉल भेजने</string>
+	<string name="list_erase_your_recordeed_call">अपने दर्ज की गई कॉल को मिटा</string>
+	<string name="reciever_start_call">रिकॉर्ड कॉल प्रारंभ</string>
+	<string name="reciever_end_call">रिकॉर्ड कॉल समाप्त</string>
+	<string name="confirm_delete_title">संवाद चेतावनी</string>
+	<string name="confirm_delete_text">क्या आप सुनिश्चित करें कि आप इस रिकॉर्डिंग को नष्ट करना चाहते हैं?</string>
+	<string name="confirm_delete_yes">हां</string>
+	<string name="confirm_delete_no">नहीं</string>
+	<string name="options_title">विकल्प शीर्षक</string>
+	<string name="options_delete">हटाना</string>
+	<string name="confirm_play">करना</string>
+	<string name="confirm_send">भेजें</string>
+	<string name="sendMail_subject">अपने फ़ोन से रिकॉर्ड</string>
+	<string name="sendMail_body">यह अपने फोन से एक कॉल रिकॉर्ड है</string>
+	<string name="about_title">के बारे में</string>
+	<string name="about_content">Kobi Krasnoff द्वारा फोन रिकॉर्डर</string>
+	<string name="about_close_button">पास</string>
+	<string name="send_mail">मेल भेजें</string>
+	<string name="withheld_number">रोक लगाई संख्या</string>
+	<string name="menu_record_is_now_enabled">आवेदन अब कॉल रिकॉर्ड के लिए सक्षम है</string>
+	<string name="menu_record_is_now_disabled">आवेदन अब सक्षम नहीं है कॉल रिकॉर्ड</string>
+	<string name="no_records_message">इस फोन में कोई रिकॉर्डिंग कर रहे हैं.\nको रिकॉर्ड करने की क्षमता मुख्य मेनू खोलने के लिए और चुन \"रिकॉर्ड सक्षम\".\nउसके बाद आवेदन अपने सभी इनकमिंग और आउटगोइंग कॉल रिकॉर्ड होगा.</string>
+</resources>
