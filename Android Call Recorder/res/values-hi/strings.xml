@@ -30,4 +30,8 @@
 	<string name="menu_record_is_now_enabled">आवेदन अब कॉल रिकॉर्ड के लिए सक्षम है</string>
 	<string name="menu_record_is_now_disabled">आवेदन अब सक्षम नहीं है कॉल रिकॉर्ड</string>
 	<string name="no_records_message">इस फोन में कोई रिकॉर्डिंग कर रहे हैं.\nको रिकॉर्ड करने की क्षमता मुख्य मेनू खोलने के लिए और चुन \"रिकॉर्ड सक्षम\".\nउसके बाद आवेदन अपने सभी इनकमिंग और आउटगोइंग कॉल रिकॉर्ड होगा.</string>
+	<string name="radio_Enable_record">रिकॉर्ड सक्षम</string>
+	<string name="radio_Disable_record">रिकॉर्ड निष्क्रिय कर देते हैं</string>
+	<string name="textview_startup">कृपया चुनें यदि आवेदन अपने कॉल रिकॉर्ड होगा.\nआप हमेशा Android मेनू बटन दबाकर अपने को चुनने में परिवर्तन कर सकते हैं.</string>
+	<string name="dialog_welcome_screen">स्क्रीन में आपका स्वागत है</string>
 </resources>

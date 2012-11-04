@@ -30,4 +30,8 @@
 	<string name="menu_record_is_now_enabled">The application is now enable to record calls</string>
 	<string name="menu_record_is_now_disabled">The application is now not enable to record calls</string>
 	<string name="no_records_message">There are no recordings in this phone.\nTo enable record ability open the main menu and choose \"Enable Record\".\nAfter that the application will record all your incoming and outgoing calls.</string>
+	<string name="radio_Enable_record">Enable Record</string>
+	<string name="radio_Disable_record">Disable Record</string>
+	<string name="textview_startup">Please choose if the application will record your calls.\nYou can always alter your choosing by pressing the Android menu button.</string>
+	<string name="dialog_welcome_screen">Welcome Screen</string>
 </resources>

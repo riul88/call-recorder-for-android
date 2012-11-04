@@ -30,16 +30,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +57,9 @@ public class MainActivity extends Activity {
 	public ScrollView mScrollView;
 	public TextView mTextView;
 	public static final String LISTEN_ENABLED = "ListenEnabled";
+	private static final int CATEGORY_DETAIL = 1;
+    public RadioButton radEnable;
+    public RadioButton radDisable;
 	
 	
     @Override
@@ -64,6 +70,12 @@ public class MainActivity extends Activity {
         listView = (ListView) findViewById(R.id.mylist);
         mScrollView = (ScrollView) findViewById(R.id.ScrollView01);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
+        
+        SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
+        boolean silent = settings.getBoolean("silentMode", false);
+
+        if (!silent)
+        	showDialog(CATEGORY_DETAIL);
     }
     
     @Override
@@ -220,4 +232,45 @@ public class MainActivity extends Activity {
 		editor.commit();
 	}
 
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case CATEGORY_DETAIL:
+			LayoutInflater li = LayoutInflater.from(this);
+			View categoryDetailView = li.inflate(R.layout.startup_dialog_layout, null);
+
+			AlertDialog.Builder categoryDetailBuilder = new AlertDialog.Builder(this);
+			categoryDetailBuilder.setTitle(this.getString(R.string.dialog_welcome_screen));
+			categoryDetailBuilder.setView(categoryDetailView);
+			AlertDialog categoryDetail = categoryDetailBuilder.create();
+
+			categoryDetail.setButton2("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					if (radEnable.isChecked())
+						setSharedPreferences(true);
+					if (radDisable.isChecked())
+						setSharedPreferences(false);
+				}});
+
+			return categoryDetail;
+		default:
+			break;
+		}
+		return null;
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		switch (id) {
+		case CATEGORY_DETAIL:
+			AlertDialog categoryDetail = (AlertDialog)dialog;
+			radEnable = (RadioButton)categoryDetail.findViewById(R.id.radio_Enable_record);
+			radDisable = (RadioButton)categoryDetail.findViewById(R.id.radio_Disable_record);
+			radEnable.setChecked(true);
+			break;
+		default:
+			break;
+		}
+		super.onPrepareDialog(id, dialog);
+	}
 }

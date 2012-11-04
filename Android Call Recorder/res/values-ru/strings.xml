@@ -30,4 +30,8 @@
 	<string name="menu_record_is_now_enabled">Приложение теперь позволяет записывать звонки</string>
 	<string name="menu_record_is_now_disabled">Приложение теперь не позволяют записывать звонки</string>
 	<string name="no_records_message">Есть никаких записей в этом телефоне.\nЧтобы включить запись способность открыть главное меню и выберите \"Включить запись\".\nПосле этого приложение будет записывать все входящие и исходящие вызовы.</string>
+	<string name="radio_Enable_record">Включить запись</string>
+	<string name="radio_Disable_record">Отключить запись</string>
+	<string name="textview_startup">Пожалуйста, выберите, если приложение будет записывать ваши звонки.\nВы всегда можете изменить ваш выбор, нажав на кнопку меню Android.</string>
+	<string name="dialog_welcome_screen">экран приветствия</string>
 </resources>

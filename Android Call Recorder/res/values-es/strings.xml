@@ -30,5 +30,9 @@
        <string name="menu_record_is_now_enabled">La aplicación está ahora permiten grabar llamadas</string>
 	   <string name="menu_record_is_now_disabled">La aplicación no está habilitado ahora para grabar llamadas</string>
 	   <string name="no_records_message">No hay grabaciones en este teléfono.\nPara capacidad de activación para grabación abrir el menú principal y seleccione \"Habilitar registro\". \nUna que la aplicación registre todas las llamadas entrantes y salientes.</string>
+	   <string name="radio_Enable_record">Activar Record</string>
+	<string name="radio_Disable_record">Desactivar Record</string>
+	<string name="textview_startup">Por favor, elija si la aplicación podrás grabar tus llamadas.\nSiempre se puede cambiar su elección presionando el botón de menú Android.</string>
+	<string name="dialog_welcome_screen">pantalla de bienvenida</string>
 </resources>
  
