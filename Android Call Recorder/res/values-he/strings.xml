@@ -32,6 +32,6 @@
 	<string name="no_records_message">אין קבצי הקלטות במכשיר זה.\nעל מנת לאפשר הקלטות פתח את התפריט הראשי ובחר \"אפשר הקלטה\" לאחר מכן האפליצקציה צהיה מסוגלת להקליט את כל השיחות היוצאות והנכנסות.</string>
 	<string name="radio_Enable_record">אפשר הקלטה</string>
 	<string name="radio_Disable_record">מנע הקלטה</string>
-	<string name="textview_startup">אנא בחר האם המכשיר יקליט את שיחותך.\nניתן תמיד שנות את בחירתך על ידי ליחצה על מקש התפריט במכשירך</string>
+	<string name="textview_startup">אנא בחר האם המכשיר יקליט את שיחותך.\nניתן תמיד שנות את בחירתך על ידי לחיצה על מקש התפריט במכשירך</string>
 	<string name="dialog_welcome_screen">ברוכים הבאים</string>
 </resources>

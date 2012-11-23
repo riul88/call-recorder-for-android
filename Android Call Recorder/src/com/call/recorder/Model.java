@@ -20,7 +20,16 @@ package com.call.recorder;
 
 public class Model implements Comparable<Model> {
     private String callName;
+    private String userNameFromContact;
    
+    public String getUserNameFromContact() {
+        return userNameFromContact;
+	}
+	
+	public void setUserNameFromContact(String userNameFromContact) {
+	        this.userNameFromContact = userNameFromContact;
+	}
+    
     public String getCallName() {
            return callName;
     }

@@ -4,13 +4,14 @@
     android:versionName="1.2">
 
     <uses-sdk
-        android:minSdkVersion="7" />
+        android:targetSdkVersion="7" android:minSdkVersion="7" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     
     <application
         android:icon="@drawable/ic_launcher"

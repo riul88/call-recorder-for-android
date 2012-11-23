@@ -82,6 +82,10 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 		{
 			myPhone = context.getString(R.string.withheld_number);
 		}
+		else if (list.get(position).getUserNameFromContact() != myPhone)
+		{
+			myPhone = list.get(position).getUserNameFromContact();
+		}
 		
 		textView.setText(myPhone);
 		
@@ -121,7 +125,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
     	
     }
     
-    private void DeleteRecord(final String fileName, final int position)
+    void DeleteRecord(final String fileName, final int position)
     {
     	new AlertDialog.Builder (context)
         .setTitle (R.string.confirm_delete_title)
@@ -148,7 +152,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
         .show ();
     }
 	
-	private void sendMail(String fileName)
+	void sendMail(String fileName)
 	{
 		Intent sendIntent;
 
@@ -161,7 +165,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 		context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.send_mail)));
 	}
 	
-	private void startPlayExternal(String charSequence)
+	void startPlayExternal(String charSequence)
 	{
 		Uri intentUri = Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + charSequence);
 		Intent intent = new Intent();

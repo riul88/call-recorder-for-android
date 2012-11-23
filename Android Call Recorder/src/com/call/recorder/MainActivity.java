@@ -26,8 +26,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,6 +40,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +64,7 @@ public class MainActivity extends Activity {
 	private static final int CATEGORY_DETAIL = 1;
     public RadioButton radEnable;
     public RadioButton radDisable;
+    private MyCallsAdapter adapter;
 	
 	
     @Override
@@ -106,7 +111,7 @@ public class MainActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				adapter.showPromotionPieceDialog(listDir.get(position)
+				showPromotionPieceDialog(listDir.get(position)
 						.getCallName(), position);
 			}
 		});
@@ -125,23 +130,56 @@ public class MainActivity extends Activity {
     	
 		super.onResume();
 	}
+    
+	/**
+	 * shows dialog of promotion tools
+	 */
+	public void showPromotionPieceDialog(final String fileName,
+			final int position) {
+
+		final CharSequence[] items = { this.getString(R.string.options_delete),
+				this.getString(R.string.confirm_play),
+				this.getString(R.string.confirm_send) };
+
+		new AlertDialog.Builder(this).setTitle(R.string.options_title)
+				.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						if (item == 0) {
+							adapter.DeleteRecord(fileName, position);
+						} else if (item == 1) {
+							// startPlay(fileName);
+							adapter.startPlayExternal(fileName);
+						} else if (item == 2) {
+							adapter.sendMail(fileName);
+						}
+
+					}
+				}).show();
+           
+           
+    }
 
 
 
 	/**
 	 * Fetches list of previous recordings
+	 * 
 	 * @param f
 	 * @return
 	 */
-    private List<Model> ListDir2(File f) {
+	private List<Model> ListDir2(File f) {
 		File[] files = f.listFiles();
 		List<Model> fileList = new ArrayList<Model>();
 		for (File file : files) {
-			fileList.add(new Model(file.getName()));
+			Model mModel = new Model(file.getName());
+			String phonenum = mModel.getCallName().substring(16,
+					mModel.getCallName().length() - 4);
+			mModel.setUserNameFromContact(getContactName(phonenum));
+			fileList.add(mModel);
 		}
-		
+
 		Collections.sort(fileList);
-        Collections.sort(fileList, Collections.reverseOrder());
+		Collections.sort(fileList, Collections.reverseOrder());
 
 		return fileList;
 	}
@@ -272,5 +310,45 @@ public class MainActivity extends Activity {
 			break;
 		}
 		super.onPrepareDialog(id, dialog);
+	}
+	
+	/**
+	 * Obtains the contact list for the currently selected account.
+	 * 
+	 * @return A cursor for for accessing the contact list.
+	 */
+	private String getContactName(String phoneNum) {
+		String res = phoneNum;
+		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+		String[] projection = new String[] {
+				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+				ContactsContract.CommonDataKinds.Phone.NUMBER };
+		String selection = null;// =
+								// ContactsContract.CommonDataKinds.Phone.NUMBER
+								// + " = ?";
+		String[] selectionArgs = null;// = new String[] { "1111111" };
+		Cursor names = getContentResolver().query(uri, projection, selection,
+				selectionArgs, null);
+
+		int indexName = names
+				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+		int indexNumber = names
+				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+		if (names.getCount() > 0) {
+			names.moveToFirst();
+			do {
+				String name = names.getString(indexName);
+				String number = names.getString(indexNumber)
+						.replaceAll("-", "");
+
+				if (number.compareTo(phoneNum) == 0) {
+					res = name;
+					break;
+				}
+
+			} while (names.moveToNext());
+		}
+
+		return res;
 	}
 }
