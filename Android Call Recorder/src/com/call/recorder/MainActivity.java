@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				showPromotionPieceDialog(listDir.get(position)
+				adapter.showPromotionPieceDialog(listDir.get(position)
 						.getCallName(), position);
 			}
 		});
@@ -131,36 +131,6 @@ public class MainActivity extends Activity {
 		super.onResume();
 	}
     
-	/**
-	 * shows dialog of promotion tools
-	 */
-	public void showPromotionPieceDialog(final String fileName,
-			final int position) {
-
-		final CharSequence[] items = { this.getString(R.string.options_delete),
-				this.getString(R.string.confirm_play),
-				this.getString(R.string.confirm_send) };
-
-		new AlertDialog.Builder(this).setTitle(R.string.options_title)
-				.setItems(items, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
-						if (item == 0) {
-							adapter.DeleteRecord(fileName, position);
-						} else if (item == 1) {
-							// startPlay(fileName);
-							adapter.startPlayExternal(fileName);
-						} else if (item == 2) {
-							adapter.sendMail(fileName);
-						}
-
-					}
-				}).show();
-           
-           
-    }
-
-
-
 	/**
 	 * Fetches list of previous recordings
 	 * 
