@@ -64,7 +64,10 @@ public class MainActivity extends Activity {
 	private static final int CATEGORY_DETAIL = 1;
     public RadioButton radEnable;
     public RadioButton radDisable;
-    private MyCallsAdapter adapter;
+        
+    private static final int MEDIA_MOUNTED = 0;
+    private static final int MEDIA_MOUNTED_READ_ONLY = 1;
+    private static final int NO_MEDIA = 2;
 	
 	
     @Override
@@ -78,6 +81,14 @@ public class MainActivity extends Activity {
         
         SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
         boolean silent = settings.getBoolean("silentMode", false);
+        
+        if (updateExternalStorageState() == MEDIA_MOUNTED) {
+            // TODO
+        } else if (updateExternalStorageState() == MEDIA_MOUNTED_READ_ONLY) {
+        	// TODO
+        } else {
+        	// TODO
+        }
 
         if (!silent)
         	showDialog(CATEGORY_DETAIL);
@@ -129,6 +140,23 @@ public class MainActivity extends Activity {
 		listView.setAdapter(adapter);
     	
 		super.onResume();
+	}
+    
+	/**
+	 * checks if an external memory card is available
+	 * 
+	 * @return
+	 */
+	private int updateExternalStorageState() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return MEDIA_MOUNTED;
+		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			return MEDIA_MOUNTED_READ_ONLY;
+		} else {
+			return NO_MEDIA;
+		}
+
 	}
     
 	/**
