@@ -34,4 +34,7 @@
 	<string name="radio_Disable_record">रिकॉर्ड निष्क्रिय कर देते हैं</string>
 	<string name="textview_startup">कृपया चुनें यदि आवेदन अपने कॉल रिकॉर्ड होगा.\nआप हमेशा Android मेनू बटन दबाकर अपने को चुनने में परिवर्तन कर सकते हैं.</string>
 	<string name="dialog_welcome_screen">स्क्रीन में आपका स्वागत है</string>
+	<string name="dialog_no_memory">अपने डिवाइस में कोई स्मृति कार्ड है.\nएक स्थापित करें.</string>
+    <string name="dialog_close">पास</string>
+    <string name="menu_terms">इस्तेमाल की शर्तें</string>
 </resources>

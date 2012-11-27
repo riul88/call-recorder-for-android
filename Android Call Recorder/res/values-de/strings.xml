@@ -34,4 +34,7 @@
 	<string name="radio_Disable_record">Deaktivieren Rekord</string>
 	<string name="textview_startup">Bitte wählen Sie, wenn die Anwendung Ihre Anrufe aufgezeichnet werden sollen.\nSie können sich jederzeit ändern Sie Ihre Wahl durch Drücken der Android Menü-Taste.</string>
 	<string name="dialog_welcome_screen">Willkommens-Bildschirm</string>
+	<string name="dialog_no_memory">Es ist keine Speicherkarte in Ihrem Gerät.\nBitte installieren Sie ein.</string>
+    <string name="dialog_close">schließen</string>
+    <string name="menu_terms">Nutzungsbedingungen</string>
 </resources>

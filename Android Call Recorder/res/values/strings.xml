@@ -34,4 +34,7 @@
 	<string name="radio_Disable_record">Disable Record</string>
 	<string name="textview_startup">Please choose if the application will record your calls.\nYou can always alter your choosing by pressing the Android menu button.</string>
 	<string name="dialog_welcome_screen">Welcome Screen</string>
+	<string name="dialog_no_memory">There is no memory card in your device.\nPlease install one.</string>
+    <string name="dialog_close">Close</string>
+    <string name="menu_terms">terms of use</string>
 </resources>

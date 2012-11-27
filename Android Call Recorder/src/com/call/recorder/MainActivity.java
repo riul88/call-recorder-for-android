@@ -62,6 +62,8 @@ public class MainActivity extends Activity {
 	public TextView mTextView;
 	public static final String LISTEN_ENABLED = "ListenEnabled";
 	private static final int CATEGORY_DETAIL = 1;
+	private static final int NO_MEMORY_CARD = 2;
+	
     public RadioButton radEnable;
     public RadioButton radDisable;
         
@@ -82,62 +84,65 @@ public class MainActivity extends Activity {
         SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
         boolean silent = settings.getBoolean("silentMode", false);
         
-        if (updateExternalStorageState() == MEDIA_MOUNTED) {
-            // TODO
-        } else if (updateExternalStorageState() == MEDIA_MOUNTED_READ_ONLY) {
-        	// TODO
-        } else {
-        	// TODO
-        }
-
         if (!silent)
         	showDialog(CATEGORY_DETAIL);
     }
     
     @Override
 	protected void onResume() {
-    	String filepath = Environment.getExternalStorageDirectory().getPath();
-    	final File file = new File(filepath, FILE_DIRECTORY);
-				
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		
-		final List<Model> listDir = ListDir2(file);
-		
-		if (listDir.isEmpty())
-		{
-			mTextView.setVisibility(TextView.VISIBLE);
+    	if (updateExternalStorageState() == MEDIA_MOUNTED) {
+	    	String filepath = Environment.getExternalStorageDirectory().getPath();
+	    	final File file = new File(filepath, FILE_DIRECTORY);
+					
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+			
+			final List<Model> listDir = ListDir2(file);
+			
+			if (listDir.isEmpty())
+			{
+				mTextView.setVisibility(TextView.VISIBLE);
+				mScrollView.setVisibility(ScrollView.GONE);
+			}
+			else
+			{
+				mTextView.setVisibility(TextView.GONE);
+				mScrollView.setVisibility(ScrollView.VISIBLE);
+			}
+			
+	    	final MyCallsAdapter adapter = new MyCallsAdapter(this, listDir);
+	    	
+			listView.setOnItemClickListener(new OnItemClickListener() {
+	
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					adapter.showPromotionPieceDialog(listDir.get(position)
+							.getCallName(), position);
+				}
+			});
+			
+			adapter.sort(new Comparator<Model>() {
+	
+				public int compare(Model arg0, Model arg1) {
+					Long date1 = Long.valueOf(arg0.getCallName().substring(1, 15));
+					Long date2 = Long.valueOf(arg1.getCallName().substring(1, 15));
+					return (date1 > date2 ? -1 : (date1 == date2 ? 0 : 1));
+				}
+	
+			});
+	    	
+			listView.setAdapter(adapter);
+    	}
+    	else if (updateExternalStorageState() == MEDIA_MOUNTED_READ_ONLY) {
+    		mTextView.setVisibility(TextView.VISIBLE);
 			mScrollView.setVisibility(ScrollView.GONE);
-		}
-		else
-		{
-			mTextView.setVisibility(TextView.GONE);
-			mScrollView.setVisibility(ScrollView.VISIBLE);
-		}
-		
-    	final MyCallsAdapter adapter = new MyCallsAdapter(this, listDir);
-    	
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				adapter.showPromotionPieceDialog(listDir.get(position)
-						.getCallName(), position);
-			}
-		});
-		
-		adapter.sort(new Comparator<Model>() {
-
-			public int compare(Model arg0, Model arg1) {
-				Long date1 = Long.valueOf(arg0.getCallName().substring(1, 15));
-				Long date2 = Long.valueOf(arg1.getCallName().substring(1, 15));
-				return (date1 > date2 ? -1 : (date1 == date2 ? 0 : 1));
-			}
-
-		});
-    	
-		listView.setAdapter(adapter);
+    		showDialog(NO_MEMORY_CARD);
+        } else {
+        	mTextView.setVisibility(TextView.VISIBLE);
+			mScrollView.setVisibility(ScrollView.GONE);
+        	showDialog(NO_MEMORY_CARD);
+        }
     	
 		super.onResume();
 	}
@@ -289,6 +294,22 @@ public class MainActivity extends Activity {
 				}});
 
 			return categoryDetail;
+		case NO_MEMORY_CARD:
+            li = LayoutInflater.from(this);
+         
+          categoryDetailBuilder = new AlertDialog.Builder(this);
+          categoryDetailBuilder.setMessage(R.string.dialog_no_memory);
+          categoryDetailBuilder.setCancelable(false);
+          categoryDetailBuilder.setPositiveButton(this.getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                         dialog.cancel();
+                   }
+            });
+          categoryDetail = categoryDetailBuilder.create();
+         
+           
+          
+          return categoryDetail;
 		default:
 			break;
 		}

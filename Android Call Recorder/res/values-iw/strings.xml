@@ -34,4 +34,7 @@
 	<string name="radio_Disable_record">מנע הקלטה</string>
 	<string name="textview_startup">אנא בחר האם המכשיר יקליט את שיחותך.\nניתן תמיד שנות את בחירתך על ידי לחיצה על מקש התפריט במכשירך</string>
 	<string name="dialog_welcome_screen">ברוכים הבאים</string>
+	<string name="dialog_no_memory">אין כרטיס זיכרון במכשירך.\nאנא התקן אחד.</string>
+    <string name="dialog_close">סגור</string>
+    <string name="menu_terms">תנאי שימוש</string>
 </resources>

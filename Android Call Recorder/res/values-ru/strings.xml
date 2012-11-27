@@ -34,4 +34,8 @@
 	<string name="radio_Disable_record">Отключить запись</string>
 	<string name="textview_startup">Пожалуйста, выберите, если приложение будет записывать ваши звонки.\nВы всегда можете изменить ваш выбор, нажав на кнопку меню Android.</string>
 	<string name="dialog_welcome_screen">экран приветствия</string>
+	<string name="dialog_no_memory">Существует нет карты памяти в устройстве.\nПожалуйста, установите один.</string>
+    <string name="dialog_close">близко</string>
+    <string name="menu_terms">Условия использования</string>
+    
 </resources>

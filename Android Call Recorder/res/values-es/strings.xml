@@ -34,5 +34,8 @@
 	<string name="radio_Disable_record">Desactivar Record</string>
 	<string name="textview_startup">Por favor, elija si la aplicación podrás grabar tus llamadas.\nSiempre se puede cambiar su elección presionando el botón de menú Android.</string>
 	<string name="dialog_welcome_screen">pantalla de bienvenida</string>
+	<string name="dialog_no_memory">No hay ninguna tarjeta de memoria en su dispositivo.\nPor favor, instale uno.</string>
+    <string name="dialog_close">cerrar</string>
+    <string name="menu_terms">Condiciones de uso</string>
 </resources>
  
