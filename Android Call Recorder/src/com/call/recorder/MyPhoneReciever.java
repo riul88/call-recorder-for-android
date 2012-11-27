@@ -42,7 +42,7 @@ public class MyPhoneReciever extends BroadcastReceiver {
 		phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 		
 		
-		if (silent)
+		if (silent && MainActivity.updateExternalStorageState() == MainActivity.MEDIA_MOUNTED)
 		{
 			if (phoneNumber == null)
 			{

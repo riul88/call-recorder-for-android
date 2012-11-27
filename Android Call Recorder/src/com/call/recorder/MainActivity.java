@@ -67,9 +67,9 @@ public class MainActivity extends Activity {
     public RadioButton radEnable;
     public RadioButton radDisable;
         
-    private static final int MEDIA_MOUNTED = 0;
-    private static final int MEDIA_MOUNTED_READ_ONLY = 1;
-    private static final int NO_MEDIA = 2;
+    public static final int MEDIA_MOUNTED = 0;
+    public static final int MEDIA_MOUNTED_READ_ONLY = 1;
+    public static final int NO_MEDIA = 2;
 	
 	
     @Override
@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
 	 * 
 	 * @return
 	 */
-	private int updateExternalStorageState() {
+	public static int updateExternalStorageState() {
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
 			return MEDIA_MOUNTED;
