@@ -20,13 +20,34 @@
 	    
     </ScrollView>
 
-    <TextView
-        android:id="@+id/txtNoRecords"
+    <ScrollView
+        android:id="@+id/ScrollView02"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:text="@string/no_records_message"
-         >
+        android:layout_height="fill_parent" android:fillViewport="true">
         
-    </TextView>
+        <LinearLayout 
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    >
+        
+		    <TextView
+		        android:id="@+id/txtNoRecords"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:text="@string/no_records_message" >
+		        
+		    </TextView>
+		
+		    <TextView
+		        android:id="@+id/txtTerms"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="10dp" >
+		        
+		    </TextView>
+	    
+	    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

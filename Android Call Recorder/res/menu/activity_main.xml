@@ -14,4 +14,8 @@
         android:orderInCategory="100"
         android:enabled="false"
         android:icon="@drawable/ic_record_disable" />
+    <item android:id="@+id/menu_see_terms"
+        android:title="@string/menu_terms"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_example" />
 </menu>

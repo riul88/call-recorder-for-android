@@ -39,6 +39,7 @@
             </intent-filter>
         </receiver>
         <service android:name=".RecordService" />
+        <activity android:name=".TermsActivity" android:label="@string/title_activity_main"/>
     </application>
 
 </manifest>

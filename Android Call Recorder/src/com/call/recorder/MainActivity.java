@@ -22,6 +22,8 @@ package com.call.recorder;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,6 +42,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,7 +62,9 @@ public class MainActivity extends Activity {
 	public static final String FILE_DIRECTORY = "recordedCalls";
 	public ListView listView;
 	public ScrollView mScrollView;
+	public ScrollView mScrollView2;
 	public TextView mTextView;
+	public TextView mTxtTerms;
 	public static final String LISTEN_ENABLED = "ListenEnabled";
 	private static final int CATEGORY_DETAIL = 1;
 	private static final int NO_MEMORY_CARD = 2;
@@ -70,6 +75,8 @@ public class MainActivity extends Activity {
     public static final int MEDIA_MOUNTED = 0;
     public static final int MEDIA_MOUNTED_READ_ONLY = 1;
     public static final int NO_MEDIA = 2;
+    
+    private static Resources res;
 	
 	
     @Override
@@ -77,15 +84,28 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        res = getResources();
+        
         listView = (ListView) findViewById(R.id.mylist);
         mScrollView = (ScrollView) findViewById(R.id.ScrollView01);
+        mScrollView2 = (ScrollView) findViewById(R.id.ScrollView02);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
+        mTxtTerms = (TextView) findViewById(R.id.txtTerms);
         
         SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
         boolean silent = settings.getBoolean("silentMode", false);
         
         if (!silent)
         	showDialog(CATEGORY_DETAIL);
+        
+        try
+        {
+        	mTxtTerms.setText(getDataFromRawFiles(R.raw.terms));
+        }
+        catch(IOException e)
+        {
+        	
+        }
     }
     
     @Override
@@ -102,12 +122,12 @@ public class MainActivity extends Activity {
 			
 			if (listDir.isEmpty())
 			{
-				mTextView.setVisibility(TextView.VISIBLE);
+				mScrollView2.setVisibility(TextView.VISIBLE);
 				mScrollView.setVisibility(ScrollView.GONE);
 			}
 			else
 			{
-				mTextView.setVisibility(TextView.GONE);
+				mScrollView2.setVisibility(TextView.GONE);
 				mScrollView.setVisibility(ScrollView.VISIBLE);
 			}
 			
@@ -135,17 +155,28 @@ public class MainActivity extends Activity {
 			listView.setAdapter(adapter);
     	}
     	else if (updateExternalStorageState() == MEDIA_MOUNTED_READ_ONLY) {
-    		mTextView.setVisibility(TextView.VISIBLE);
-			mScrollView.setVisibility(ScrollView.GONE);
+    		mScrollView2.setVisibility(TextView.VISIBLE);
+    		mScrollView.setVisibility(ScrollView.GONE);
     		showDialog(NO_MEMORY_CARD);
         } else {
-        	mTextView.setVisibility(TextView.VISIBLE);
-			mScrollView.setVisibility(ScrollView.GONE);
+        	mScrollView2.setVisibility(TextView.VISIBLE);
+        	mScrollView.setVisibility(ScrollView.GONE);
         	showDialog(NO_MEMORY_CARD);
         }
     	
 		super.onResume();
 	}
+    
+    public static String getDataFromRawFiles(int id) throws IOException 
+    {
+    	InputStream in_s = res.openRawResource(id);
+
+        byte[] b = new byte[in_s.available()];
+        in_s.read(b);
+    	String value = new String(b);
+    	
+    	return value;
+    }
     
 	/**
 	 * checks if an external memory card is available
@@ -240,6 +271,10 @@ public class MainActivity extends Activity {
             	//activateNotification();
             	toast = Toast.makeText(this, this.getString(R.string.menu_record_is_now_enabled), Toast.LENGTH_SHORT);
 		    	toast.show();
+            	break;
+            case R.id.menu_see_terms:
+            	Intent i = new Intent(this.getBaseContext(), TermsActivity.class);
+        		startActivity(i);
             	break;
             default:
             	break;
