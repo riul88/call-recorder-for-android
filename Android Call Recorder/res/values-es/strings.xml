@@ -37,5 +37,9 @@
 	<string name="dialog_no_memory">No hay ninguna tarjeta de memoria en su dispositivo.\nPor favor, instale uno.</string>
     <string name="dialog_close">cerrar</string>
     <string name="menu_terms">Condiciones de uso</string>
+    <string name="menu_privacy_policy">Política de privacidad</string>
+    <string name="dialog_terms">Terms of use</string>
+    <string name="dialog_privacy">Política de privacidad</string>
+    <string name="dialog_privacy_terms">Por favor, haga clic en los botones de abajo para ver las condiciones de uso y política de privacidad</string>
 </resources>
  

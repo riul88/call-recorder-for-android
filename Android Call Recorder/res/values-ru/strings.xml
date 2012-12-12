@@ -37,5 +37,9 @@
 	<string name="dialog_no_memory">Существует нет карты памяти в устройстве.\nПожалуйста, установите один.</string>
     <string name="dialog_close">близко</string>
     <string name="menu_terms">Условия использования</string>
+    <string name="menu_privacy_policy">Политика конфиденциальности</string>
+    <string name="dialog_terms">Условия использования</string>
+    <string name="dialog_privacy">Политика конфиденциальности</string>
+    <string name="dialog_privacy_terms">Пожалуйста, нажмите на кнопку ниже, чтобы увидеть условия использования и политика конфиденциальности</string>
     
 </resources>

@@ -37,4 +37,8 @@
 	<string name="dialog_no_memory">अपने डिवाइस में कोई स्मृति कार्ड है.\nएक स्थापित करें.</string>
     <string name="dialog_close">पास</string>
     <string name="menu_terms">इस्तेमाल की शर्तें</string>
+    <string name="menu_privacy_policy">गोपनीयता नीति</string>
+    <string name="dialog_terms">תנאי שימוש</string>
+    <string name="dialog_privacy">गोपनीयता नीति</string>
+    <string name="dialog_privacy_terms">बटन नीचे क्लिक करें उपयोग की शर्तों और गोपनीयता नीति देखें</string>
 </resources>

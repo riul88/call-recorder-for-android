@@ -37,4 +37,8 @@
 	<string name="dialog_no_memory">Es ist keine Speicherkarte in Ihrem Gerät.\nBitte installieren Sie ein.</string>
     <string name="dialog_close">schließen</string>
     <string name="menu_terms">Nutzungsbedingungen</string>
+    <string name="menu_privacy_policy">Datenschutz</string>
+    <string name="dialog_terms">Nutzungsbedingungen</string>
+    <string name="dialog_privacy">Datenschutz</string>
+    <string name="dialog_privacy_terms">Bitte klicken Sie auf die Buttons unten um die Nutzungsbedingungen und Datenschutzbestimmungen zu sehen</string>
 </resources>

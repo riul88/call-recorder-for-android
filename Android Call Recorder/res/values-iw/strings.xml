@@ -37,4 +37,8 @@
 	<string name="dialog_no_memory">אין כרטיס זיכרון במכשירך.\nאנא התקן אחד.</string>
     <string name="dialog_close">סגור</string>
     <string name="menu_terms">תנאי שימוש</string>
+   <string name="menu_privacy_policy">מדיניות פרטיות</string>
+    <string name="dialog_terms">תנאי שימוש</string>
+    <string name="dialog_privacy">מדיניות פרטיות</string>
+    <string name="dialog_privacy_terms">אנא לחץ על הכפתורים למטה כדי לראות את תנאי שימוש ומדיניות פרטיות</string>
 </resources>
