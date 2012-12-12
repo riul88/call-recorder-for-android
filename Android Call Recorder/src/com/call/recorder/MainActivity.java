@@ -39,6 +39,7 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -64,10 +65,10 @@ public class MainActivity extends Activity {
 	public ScrollView mScrollView;
 	public ScrollView mScrollView2;
 	public TextView mTextView;
-	public TextView mTxtTerms;
 	public static final String LISTEN_ENABLED = "ListenEnabled";
 	private static final int CATEGORY_DETAIL = 1;
 	private static final int NO_MEMORY_CARD = 2;
+	private static final int TERMS = 3;
 	
     public RadioButton radEnable;
     public RadioButton radDisable;
@@ -77,6 +78,7 @@ public class MainActivity extends Activity {
     public static final int NO_MEDIA = 2;
     
     private static Resources res;
+    private Context context;
 	
 	
     @Override
@@ -90,7 +92,6 @@ public class MainActivity extends Activity {
         mScrollView = (ScrollView) findViewById(R.id.ScrollView01);
         mScrollView2 = (ScrollView) findViewById(R.id.ScrollView02);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
-        mTxtTerms = (TextView) findViewById(R.id.txtTerms);
         
         SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
         boolean silent = settings.getBoolean("silentMode", false);
@@ -98,14 +99,8 @@ public class MainActivity extends Activity {
         if (!silent)
         	showDialog(CATEGORY_DETAIL);
         
-        try
-        {
-        	mTxtTerms.setText(getDataFromRawFiles(R.raw.terms));
-        }
-        catch(IOException e)
-        {
-        	
-        }
+        context = this.getBaseContext();
+        showDialog(TERMS);
     }
     
     @Override
@@ -164,7 +159,7 @@ public class MainActivity extends Activity {
         	showDialog(NO_MEMORY_CARD);
         }
     	
-		super.onResume();
+    	super.onResume();
 	}
     
     public static String getDataFromRawFiles(int id) throws IOException 
@@ -345,6 +340,34 @@ public class MainActivity extends Activity {
            
           
           return categoryDetail;
+		case TERMS:
+			li = LayoutInflater.from(this);
+	         
+	          categoryDetailBuilder = new AlertDialog.Builder(this);
+	          categoryDetailBuilder.setMessage(this.getString(R.string.dialog_privacy_terms));
+	          categoryDetailBuilder.setCancelable(false);
+	          categoryDetailBuilder.setPositiveButton(this.getString(R.string.dialog_terms), new DialogInterface.OnClickListener() {
+	        	  public void onClick(DialogInterface dialog, int id) {
+	        		  Intent i = new Intent(context, TermsActivity.class);
+	          		  startActivity(i);
+	        	  }
+	          });
+	          categoryDetailBuilder.setNegativeButton(this.getString(R.string.dialog_privacy), new DialogInterface.OnClickListener() {
+	        	  public void onClick(DialogInterface dialog, int id) {
+	        		  Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.privacychoice.org/policy/mobile?policy=306ef01761f300e3c30ccfc534babf6b"));
+	              	  startActivity(browserIntent);
+	        	  }
+	          });
+	          categoryDetailBuilder.setNeutralButton(this.getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
+	        	  public void onClick(DialogInterface dialog, int id) {
+	        		  dialog.cancel();
+	        	  }
+	          });
+	          categoryDetail = categoryDetailBuilder.create();
+	         
+	           
+	          
+	          return categoryDetail;
 		default:
 			break;
 		}
