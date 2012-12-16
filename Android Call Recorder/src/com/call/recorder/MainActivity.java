@@ -100,7 +100,7 @@ public class MainActivity extends Activity {
         	showDialog(CATEGORY_DETAIL);
         
         context = this.getBaseContext();
-        showDialog(TERMS);
+        //showDialog(TERMS);
     }
     
     @Override
@@ -270,6 +270,10 @@ public class MainActivity extends Activity {
             case R.id.menu_see_terms:
             	Intent i = new Intent(this.getBaseContext(), TermsActivity.class);
         		startActivity(i);
+            	break;
+            case R.id.menu_privacy_policy:
+            	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.privacychoice.org/policy/mobile?policy=306ef01761f300e3c30ccfc534babf6b"));
+            	startActivity(browserIntent);
             	break;
             default:
             	break;
