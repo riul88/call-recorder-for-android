@@ -174,5 +174,8 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 		context.startActivity(intent);
 	}
 	
-	
+	public void removeFromList(int position)
+	{
+		list.remove(position);
+	}
 }

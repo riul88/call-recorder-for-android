@@ -275,11 +275,49 @@ public class MainActivity extends Activity {
             	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.privacychoice.org/policy/mobile?policy=306ef01761f300e3c30ccfc534babf6b"));
             	startActivity(browserIntent);
             	break;
+            case R.id.menu_delete_all:
+            	AlertDialog.Builder builderDelete = new AlertDialog.Builder(MainActivity.this);
+            	builderDelete.setTitle(R.string.dialog_delete_all_title)
+            	.setMessage(R.string.dialog_delete_all_content)
+            	.setPositiveButton(R.string.dialog_delete_all_yes, new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int id) {
+        				deleteAllRecords();
+        				dialog.cancel();
+        			}
+        		})
+            	.setNegativeButton(R.string.dialog_delete_all_no, new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int id) {
+        				dialog.cancel();
+        			}
+        		})
+        		.show();
+            	break;
             default:
             	break;
         }
         return super.onOptionsItemSelected(item);
     }
+	
+	private void deleteAllRecords()
+	{
+		String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
+		File file = new File(filepath);
+		
+		String listOfFileNames[] = file.list();
+		
+		// TODO dont forget to update the list
+		for (int i = 0; i<listOfFileNames.length; i++)
+		{
+			File file2 = new File(filepath, listOfFileNames[i]);
+			if (file2.exists()) {
+				file2.delete();
+				//removeFromList(i);
+    			//list.remove(position);
+    			//notifyDataSetChanged();
+    		}
+		}
+		onResume();
+	}
 	
 	private void activateNotification()
 	{

@@ -41,4 +41,9 @@
     <string name="dialog_terms">Terms of use</string>
     <string name="dialog_privacy">Privacy Policy</string>
     <string name="dialog_privacy_terms">Please click the buttons below to see the terms of use and privacy policy</string>
+    <string name="menu_delete_all">Delete All recordings</string>
+    <string name="dialog_delete_all_title">Alert Message</string>
+    <string name="dialog_delete_all_content">Are you sure you want to delete all of your recordings?</string>
+    <string name="dialog_delete_all_yes">Yes</string>
+    <string name="dialog_delete_all_no">No</string>
 </resources>
