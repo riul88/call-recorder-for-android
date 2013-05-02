@@ -41,4 +41,9 @@
     <string name="dialog_terms">Nutzungsbedingungen</string>
     <string name="dialog_privacy">Datenschutz</string>
     <string name="dialog_privacy_terms">Bitte klicken Sie auf die Buttons unten um die Nutzungsbedingungen und Datenschutzbestimmungen zu sehen</string>
+    <string name="menu_delete_all">Alle Aufnahmen löschen</string>
+    <string name="dialog_delete_all_title">Warnmeldung</string>
+    <string name="dialog_delete_all_content">Sind Sie sicher, dass Sie alle Ihre Aufnahmen löschen?</string>
+    <string name="dialog_delete_all_yes">Ja</string>
+    <string name="dialog_delete_all_no">Keine</string>
 </resources>

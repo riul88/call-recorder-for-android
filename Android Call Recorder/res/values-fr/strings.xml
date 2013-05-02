@@ -41,4 +41,9 @@
     <string name="dialog_terms">Conditions d\'utilisation</string>
     <string name="dialog_privacy">Politique de confidentialité</string>
     <string name="dialog_privacy_terms">S\'il vous plaît cliquer sur les boutons ci-dessous pour voir les conditions d\'utilisation et politique de confidentialité</string>
+    <string name="menu_delete_all">Supprimer tous les enregistrements</string>
+    <string name="dialog_delete_all_title">message d\'alerte</string>
+    <string name="dialog_delete_all_content">Etes-vous sûr de vouloir effacer tous vos enregistrements?</string>
+    <string name="dialog_delete_all_yes">Oui</string>
+    <string name="dialog_delete_all_no">Non</string>
 </resources>

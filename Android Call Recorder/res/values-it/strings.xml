@@ -41,4 +41,9 @@
     <string name="dialog_terms">Condizioni di utilizzo</string>
     <string name="dialog_privacy">Informativa sulla privacy</string>
     <string name="dialog_privacy_terms">Si prega di fare clic sui pulsanti qui sotto per vedere le condizioni di utilizzo e l\'informativa sulla privacy</string>
+    <string name="menu_delete_all">Eliminare tutte le registrazioni</string>
+    <string name="dialog_delete_all_title">Messaggio di avviso</string>
+    <string name="dialog_delete_all_content">Sei sicuro di voler cancellare tutte le registrazioni?</string>
+    <string name="dialog_delete_all_yes">Sì</string>
+    <string name="dialog_delete_all_no">No</string>
 </resources>

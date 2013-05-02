@@ -41,5 +41,9 @@
     <string name="dialog_terms">Условия использования</string>
     <string name="dialog_privacy">Политика конфиденциальности</string>
     <string name="dialog_privacy_terms">Пожалуйста, нажмите на кнопку ниже, чтобы увидеть условия использования и политика конфиденциальности</string>
-    
+    <string name="menu_delete_all">Удалить все записи</string>
+    <string name="dialog_delete_all_title">предупреждение</string>
+    <string name="dialog_delete_all_content">Вы уверены, что хотите удалить все записи?</string>
+    <string name="dialog_delete_all_yes">да</string>
+    <string name="dialog_delete_all_no">нет</string>
 </resources>

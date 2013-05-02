@@ -41,4 +41,9 @@
     <string name="dialog_terms">תנאי שימוש</string>
     <string name="dialog_privacy">गोपनीयता नीति</string>
     <string name="dialog_privacy_terms">बटन नीचे क्लिक करें उपयोग की शर्तों और गोपनीयता नीति देखें</string>
+    <string name="menu_delete_all">सभी रिकॉर्डिंग हटाएँ</string>
+    <string name="dialog_delete_all_title">चेतावनी संदेश</string>
+    <string name="dialog_delete_all_content">आप अपने रिकॉर्डिंग के सभी को नष्ट करना चाहते हैं?</string>
+    <string name="dialog_delete_all_yes">हां</string>
+    <string name="dialog_delete_all_no">नहीं</string>
 </resources>

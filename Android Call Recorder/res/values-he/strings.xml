@@ -41,4 +41,9 @@
     <string name="dialog_terms">תנאי שימוש</string>
     <string name="dialog_privacy">מדיניות פרטיות</string>
     <string name="dialog_privacy_terms">אנא לחץ על הכפתורים למטה כדי לראות את תנאי שימוש ומדיניות פרטיות</string>
+    <string name="menu_delete_all">מחק את כל ההקלטות</string>
+    <string name="dialog_delete_all_title">מסך התראה</string>
+    <string name="dialog_delete_all_content">האם אתה בטוח שברצונך למחוק את כל ההקלטות</string>
+    <string name="dialog_delete_all_yes">כן</string>
+    <string name="dialog_delete_all_no">לא</string>
 </resources>
