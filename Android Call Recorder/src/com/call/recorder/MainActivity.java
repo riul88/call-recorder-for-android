@@ -305,16 +305,12 @@ public class MainActivity extends Activity {
 		
 		String listOfFileNames[] = file.list();
 		
-		// TODO dont forget to update the list
 		for (int i = 0; i<listOfFileNames.length; i++)
 		{
 			File file2 = new File(filepath, listOfFileNames[i]);
 			if (file2.exists()) {
 				file2.delete();
-				//removeFromList(i);
-    			//list.remove(position);
-    			//notifyDataSetChanged();
-    		}
+			}
 		}
 		onResume();
 	}
