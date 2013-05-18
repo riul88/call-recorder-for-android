@@ -46,4 +46,7 @@
     <string name="dialog_delete_all_content">Are you sure you want to delete all of your recordings?</string>
     <string name="dialog_delete_all_yes">Yes</string>
     <string name="dialog_delete_all_no">No</string>
+    <string name="notification_ticker">Recording is now Starting</string>
+	<string name="notification_title">The phone is now recording the conversation</string>
+	<string name="notification_text">The phone will stop the recording when the conversation will end</string>
 </resources>

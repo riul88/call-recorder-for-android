@@ -46,4 +46,7 @@
     <string name="dialog_delete_all_content">Etes-vous sûr de vouloir effacer tous vos enregistrements?</string>
     <string name="dialog_delete_all_yes">Oui</string>
     <string name="dialog_delete_all_no">Non</string>
+    <string name="notification_ticker">L\'enregistrement commence maintenant</string>
+	<string name="notification_title">Le téléphone enregistre actuellement la conversation</string>
+	<string name="notification_text">Le téléphone arrête l\'enregistrement quand la conversation prend fin</string>
 </resources>

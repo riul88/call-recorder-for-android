@@ -46,4 +46,7 @@
     <string name="dialog_delete_all_content">Sei sicuro di voler cancellare tutte le registrazioni?</string>
     <string name="dialog_delete_all_yes">Sì</string>
     <string name="dialog_delete_all_no">No</string>
+    <string name="notification_ticker">La registrazione è ora di iniziare</string>
+	<string name="notification_title">Il telefono è ora registrando la conversazione</string>
+	<string name="notification_text">Il telefono si ferma la registrazione quando la conversazione si concluderà</string>
 </resources>

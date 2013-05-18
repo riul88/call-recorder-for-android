@@ -46,4 +46,7 @@
     <string name="dialog_delete_all_content">Вы уверены, что хотите удалить все записи?</string>
     <string name="dialog_delete_all_yes">да</string>
     <string name="dialog_delete_all_no">нет</string>
+    <string name="notification_ticker">Запись в настоящее время начинает</string>
+	<string name="notification_title">Телефон выполняет запись разговора</string>
+	<string name="notification_text">Телефон прекращает запись, когда разговор закончится</string>
 </resources>

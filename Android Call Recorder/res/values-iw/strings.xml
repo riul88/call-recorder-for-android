@@ -46,4 +46,7 @@
     <string name="dialog_delete_all_content">האם אתה בטוח שברצונך למחוק את כל ההקלטות?</string>
     <string name="dialog_delete_all_yes">כן</string>
     <string name="dialog_delete_all_no">לא</string>
+    <string name="notification_ticker">הקלטה כעת מתחילה</string>
+	<string name="notification_title">המערכת מקליטה כרגע</string>
+	<string name="notification_text">ההקלטה תיפסק כאשר השיחה תסתיים</string>
 </resources>

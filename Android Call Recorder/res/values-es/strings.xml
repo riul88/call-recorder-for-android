@@ -46,5 +46,8 @@
     <string name="dialog_delete_all_content">Está seguro de que desea eliminar todas las grabaciones?</string>
     <string name="dialog_delete_all_yes">Sí</string>
     <string name="dialog_delete_all_no">No</string>
+    <string name="notification_ticker">Grabación está empezando</string>
+	<string name="notification_title">Ahora el teléfono está grabando la conversación</string>
+	<string name="notification_text">El teléfono detendrá la grabación cuando termine la conversación</string>
 </resources>
  

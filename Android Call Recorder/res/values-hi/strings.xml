@@ -46,4 +46,7 @@
     <string name="dialog_delete_all_content">आप अपने रिकॉर्डिंग के सभी को नष्ट करना चाहते हैं?</string>
     <string name="dialog_delete_all_yes">हां</string>
     <string name="dialog_delete_all_no">नहीं</string>
+    <string name="notification_ticker">रिकॉर्डिंग अब शुरू है</string>
+	<string name="notification_title">फोन अब बातचीत की रिकॉर्डिंग है</string>
+	<string name="notification_text">बातचीत खत्म हो जाएगा जब फोन रिकॉर्डिंग बंद हो जाएगा</string>
 </resources>
