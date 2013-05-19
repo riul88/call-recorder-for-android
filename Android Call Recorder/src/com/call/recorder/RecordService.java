@@ -80,10 +80,15 @@ public class RecordService extends Service {
 				phoneNumber = intent.getStringExtra("phoneNumber");
 			
 			
-			recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-			recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-			recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-			recorder.setOutputFile(getFilename());
+			try {
+				recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+				recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+				recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+				recorder.setOutputFile(getFilename());
+			}
+			catch (IllegalStateException e) {
+				Log.e("Call recorder IllegalStateException: ", "");
+			}
 			
 			OnErrorListener errorListener = new OnErrorListener() {
 
@@ -117,31 +122,33 @@ public class RecordService extends Service {
 				recorder.start();
 				Toast toast = Toast.makeText(this, this.getString(R.string.reciever_start_call), Toast.LENGTH_SHORT);
 		    	toast.show();
-		    	//openDialog();
+		    	
+		    	manger = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		    	Notification notification = new Notification(R.drawable.ic_launcher, this.getString(R.string.notification_ticker), System.currentTimeMillis());
+		    	notification.flags = Notification.FLAG_NO_CLEAR;
+		    	
+		    	Intent intent2 = new Intent(this, MainActivity.class);
+		    	intent2.putExtra("RecordStatus", true);
+
+		        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, intent2, 0);
+		        notification.setLatestEventInfo(this, this.getString(R.string.notification_title), this.getString(R.string.notification_text), contentIntent);
+		        //manger.notify(0, notification);
+		        
+		        startForeground(1337, notification);
+		    	
 			} catch (IllegalStateException e) {
-				Log.e("Call recorder IllegalStateException: ", e.getMessage());
+				Log.e("Call recorder IllegalStateException: ", "");
 				e.printStackTrace();
 			} catch (IOException e) {
-				Log.e("Call recorder IOException: ", e.getMessage());
+				Log.e("Call recorder IOException: ", "");
 				e.printStackTrace();
 			}
 			catch (Exception e) {
-				Log.e("Call recorder Exception: ", e.getMessage());
+				Log.e("Call recorder Exception: ", "");
 				e.printStackTrace();
 			}
 			
-			manger = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-	    	Notification notification = new Notification(R.drawable.ic_launcher, this.getString(R.string.notification_ticker), System.currentTimeMillis());
-	    	notification.flags = Notification.FLAG_NO_CLEAR;
-	    	
-	    	Intent intent2 = new Intent(this, MainActivity.class);
-	    	intent2.putExtra("RecordStatus", true);
-
-	        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, intent2, 0);
-	        notification.setLatestEventInfo(this, this.getString(R.string.notification_title), this.getString(R.string.notification_text), contentIntent);
-	        //manger.notify(0, notification);
-	        
-	        startForeground(1337, notification);
+			
 		}
 		else if (commandType == STATE_CALL_END)
 		{
@@ -155,7 +162,8 @@ public class RecordService extends Service {
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			}
-			manger.cancel(0);
+			if (manger != null)
+				manger.cancel(0);
 			stopForeground(true);
 			this.stopSelf();
 		}
