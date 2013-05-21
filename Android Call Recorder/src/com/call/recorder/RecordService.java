@@ -89,6 +89,9 @@ public class RecordService extends Service {
 			catch (IllegalStateException e) {
 				Log.e("Call recorder IllegalStateException: ", "");
 			}
+			catch (Exception e) {
+				Log.e("Call recorder Exception: ", "");
+			}
 			
 			OnErrorListener errorListener = new OnErrorListener() {
 
