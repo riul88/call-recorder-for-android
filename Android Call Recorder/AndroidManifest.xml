@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.call.recorder"
-    android:versionCode="16"
+    android:versionCode="17"
     android:versionName="1.3.6">
 
     <uses-sdk
@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme" 
         android:launchMode="singleInstance"
         android:taskAffinity=""
-        android:excludeFromRecents="false">
+        android:excludeFromRecents="false"
+        android:debuggable="false">
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
