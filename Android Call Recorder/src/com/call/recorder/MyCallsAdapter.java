@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 
-//import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,11 +33,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.LayoutInflater;
-//import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-//import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -131,8 +128,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
         .setTitle (R.string.confirm_delete_title)
         .setMessage (R.string.confirm_delete_text)
         .setPositiveButton (R.string.confirm_delete_yes, new DialogInterface.OnClickListener(){
-            //@SuppressLint("ParserError")
-			public void onClick (DialogInterface dialog, int whichButton){
+            public void onClick (DialogInterface dialog, int whichButton){
             	String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
             	File file = new File(filepath, fileName);
         		
