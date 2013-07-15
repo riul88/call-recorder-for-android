@@ -49,4 +49,5 @@
     <string name="notification_ticker">הקלטה כעת מתחילה</string>
 	<string name="notification_title">המערכת מקליטה כרגע</string>
 	<string name="notification_text">ההקלטה תיפסק כאשר השיחה תסתיים</string>
+	<string name="record_impossible">למרבה הצער, לא ניתן להקליט במכשיר זה.</string>
 </resources>

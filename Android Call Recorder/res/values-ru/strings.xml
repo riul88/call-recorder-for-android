@@ -49,4 +49,5 @@
     <string name="notification_ticker">Запись в настоящее время начинает</string>
 	<string name="notification_title">Телефон выполняет запись разговора</string>
 	<string name="notification_text">Телефон прекращает запись, когда разговор закончится</string>
+	<string name="record_impossible">К сожалению, это не возможно записывать звонки в данном устройстве.</string>
 </resources>

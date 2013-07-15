@@ -49,5 +49,6 @@
     <string name="notification_ticker">Grabación está empezando</string>
 	<string name="notification_title">Ahora el teléfono está grabando la conversación</string>
 	<string name="notification_text">El teléfono detendrá la grabación cuando termine la conversación</string>
+	<string name="record_impossible">Desafortunadamente, no es posible grabar las llamadas en este dispositivo.</string>
 </resources>
  

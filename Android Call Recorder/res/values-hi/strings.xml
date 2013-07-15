@@ -49,4 +49,5 @@
     <string name="notification_ticker">रिकॉर्डिंग अब शुरू है</string>
 	<string name="notification_title">फोन अब बातचीत की रिकॉर्डिंग है</string>
 	<string name="notification_text">बातचीत खत्म हो जाएगा जब फोन रिकॉर्डिंग बंद हो जाएगा</string>
+	<string name="record_impossible">दुर्भाग्य से, यह इस डिवाइस में कॉल रिकॉर्ड करने के लिए संभव नहीं है.</string>
 </resources>

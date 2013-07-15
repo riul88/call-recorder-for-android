@@ -49,4 +49,5 @@
     <string name="notification_ticker">Aufnahme beginnt jetzt</string>
 	<string name="notification_title">Das Telefon ist nun das Gespräch aufzeichnen</string>
 	<string name="notification_text">Das Telefon wird die Aufnahme zu beenden, wenn das Gespräch wird beendet</string>
+	<string name="record_impossible">Leider ist es nicht möglich, Anrufe in dieser Vorrichtung aufzunehmen.</string>
 </resources>

@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
 	
 	public static final String FILE_DIRECTORY = "recordedCalls";
 	public ListView listView;
-	public ScrollView mScrollView;
+	//public ScrollView mScrollView;
 	public ScrollView mScrollView2;
 	public TextView mTextView;
 	public static final String LISTEN_ENABLED = "ListenEnabled";
@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         res = getResources();
         
         listView = (ListView) findViewById(R.id.mylist);
-        mScrollView = (ScrollView) findViewById(R.id.ScrollView01);
+        //mScrollView = (ScrollView) findViewById(R.id.ScrollView01);
         mScrollView2 = (ScrollView) findViewById(R.id.ScrollView02);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
         
@@ -118,12 +118,12 @@ public class MainActivity extends Activity {
 			if (listDir.isEmpty())
 			{
 				mScrollView2.setVisibility(TextView.VISIBLE);
-				mScrollView.setVisibility(ScrollView.GONE);
+				listView.setVisibility(ScrollView.GONE);
 			}
 			else
 			{
 				mScrollView2.setVisibility(TextView.GONE);
-				mScrollView.setVisibility(ScrollView.VISIBLE);
+				listView.setVisibility(ScrollView.VISIBLE);
 			}
 			
 	    	final MyCallsAdapter adapter = new MyCallsAdapter(this, listDir);
@@ -151,11 +151,11 @@ public class MainActivity extends Activity {
     	}
     	else if (updateExternalStorageState() == MEDIA_MOUNTED_READ_ONLY) {
     		mScrollView2.setVisibility(TextView.VISIBLE);
-    		mScrollView.setVisibility(ScrollView.GONE);
+    		listView.setVisibility(ScrollView.GONE);
     		showDialog(NO_MEMORY_CARD);
         } else {
         	mScrollView2.setVisibility(TextView.VISIBLE);
-        	mScrollView.setVisibility(ScrollView.GONE);
+        	listView.setVisibility(ScrollView.GONE);
         	showDialog(NO_MEMORY_CARD);
         }
     	

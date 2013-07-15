@@ -5,20 +5,26 @@
     android:layout_height="fill_parent"
     >
 
-    <ScrollView
+    <!-- ScrollView
         android:id="@+id/ScrollView01"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:fillViewport="true">
         
-        <ListView
-            android:id="@+id/mylist"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            >
+        <LinearLayout 
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    -->
+        	<ListView
+            	android:id="@+id/mylist"
+            	android:layout_width="fill_parent"
+            	android:layout_height="fill_parent"
+            	></ListView>
+          <!-- /LinearLayout>
 
-	    </ListView>
 	    
-    </ScrollView>
+	    
+    </ScrollView-->
 
     <ScrollView
         android:id="@+id/ScrollView02"

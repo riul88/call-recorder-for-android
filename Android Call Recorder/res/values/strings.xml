@@ -49,4 +49,5 @@
     <string name="notification_ticker">Recording is now Starting</string>
 	<string name="notification_title">The phone is now recording the conversation</string>
 	<string name="notification_text">The phone will stop the recording when the conversation will end</string>
+	<string name="record_impossible">Unfortunately, it is not possible to record calls in this device.</string>
 </resources>

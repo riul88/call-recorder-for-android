@@ -50,6 +50,7 @@ public class RecordService extends Service {
 	public static final int STATE_CALL_END = 2;
 	
 	private NotificationManager manger;
+	private String myFileName;
 	
 	
 	@Override
@@ -84,13 +85,16 @@ public class RecordService extends Service {
 				recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
 				recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 				recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-				recorder.setOutputFile(getFilename());
+				myFileName = getFilename();
+				recorder.setOutputFile(myFileName);
 			}
 			catch (IllegalStateException e) {
 				Log.e("Call recorder IllegalStateException: ", "");
+				terminateAndEraseFile();
 			}
 			catch (Exception e) {
 				Log.e("Call recorder Exception: ", "");
+				terminateAndEraseFile();
 			}
 			
 			OnErrorListener errorListener = new OnErrorListener() {
@@ -101,6 +105,7 @@ public class RecordService extends Service {
 					arg0.reset();
 					arg0.release();
 					arg0 = null;
+					terminateAndEraseFile();
 				}
 				
 			};
@@ -113,7 +118,7 @@ public class RecordService extends Service {
 					arg0.reset();
 					arg0.release();
 					arg0 = null;
-					
+					terminateAndEraseFile();
 				}
 				
 			};
@@ -141,13 +146,16 @@ public class RecordService extends Service {
 		    	
 			} catch (IllegalStateException e) {
 				Log.e("Call recorder IllegalStateException: ", "");
+				terminateAndEraseFile();
 				e.printStackTrace();
 			} catch (IOException e) {
 				Log.e("Call recorder IOException: ", "");
+				terminateAndEraseFile();
 				e.printStackTrace();
 			}
 			catch (Exception e) {
 				Log.e("Call recorder Exception: ", "");
+				terminateAndEraseFile();
 				e.printStackTrace();
 			}
 			
@@ -174,31 +182,29 @@ public class RecordService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
-	private void openDialog()
+	/**
+	 * in case it is impossible to record
+	 */
+	private void terminateAndEraseFile()
 	{
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getBaseContext());
+		try {
+			recorder.stop();
+			recorder.reset();
+			recorder.release();
+			recorder = null;
+			Toast toast = Toast.makeText(this, this.getString(R.string.reciever_end_call), Toast.LENGTH_SHORT);
+	    	toast.show();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+		File file = new File(myFileName);
 		
-		// set title
-		alertDialogBuilder.setTitle("Your Title");
-
-		// set dialog message
-		alertDialogBuilder.setMessage("Click yes to exit!")
-				.setCancelable(false)
-
-				.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						// if this button is clicked, just close
-						// the dialog box and do nothing
-						dialog.cancel();
-					}
-				});
-
-		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
-
+		if (file.exists()) {
+			file.delete();
+			
+		}
+		Toast toast = Toast.makeText(this, this.getString(R.string.record_impossible), Toast.LENGTH_LONG);
+    	toast.show();
 	}
 
 	@Override
