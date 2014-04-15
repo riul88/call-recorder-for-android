@@ -115,6 +115,17 @@ public class MainActivity extends Activity {
 			
 			final List<Model> listDir = ListDir2(file);
 			
+			filepath = getFilesDir().getAbsolutePath();
+	    	final File file2 = new File(filepath, FILE_DIRECTORY);
+					
+			if (!file2.exists()) {
+				file2.mkdirs();
+			}
+			
+			final List<Model> listDir2 = ListDir2(file2);
+			
+			listDir.addAll(listDir2);
+			
 			if (listDir.isEmpty())
 			{
 				mScrollView2.setVisibility(TextView.VISIBLE);
@@ -312,6 +323,20 @@ public class MainActivity extends Activity {
 				file2.delete();
 			}
 		}
+		
+		filepath = getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY;
+		file = new File(filepath);
+		
+		String listOfFileNames2[] = file.list();
+		
+		for (int i = 0; i<listOfFileNames2.length; i++)
+		{
+			File file2 = new File(filepath, listOfFileNames2[i]);
+			if (file2.exists()) {
+				file2.delete();
+			}
+		}
+		
 		onResume();
 	}
 	

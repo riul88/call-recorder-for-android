@@ -19,6 +19,7 @@
 package com.call.recorder;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -218,7 +219,7 @@ public class RecordService extends Service {
 	 * @return
 	 */
 	private String getFilename() {
-		String filepath = Environment.getExternalStorageDirectory().getPath();
+		String filepath = getFilesDir().getAbsolutePath();
 		File file = new File(filepath, FILE_DIRECTORY);
 
 		if (!file.exists()) {

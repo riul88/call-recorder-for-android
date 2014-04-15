@@ -26,8 +26,11 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 
+
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -137,6 +140,15 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
         			list.remove(position);
         			notifyDataSetChanged();
         		}
+        		
+        		filepath = context.getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY;
+            	file = new File(filepath, fileName);
+        		
+        		if (file.exists()) {
+        			file.delete();
+        			list.remove(position);
+        			notifyDataSetChanged();
+        		}
             }
         })
         .setNegativeButton(R.string.confirm_delete_no, new DialogInterface.OnClickListener(){
@@ -150,12 +162,18 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 	
 	void sendMail(String fileName)
 	{
+		String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
+    	File file = new File(filepath, fileName);
+		
 		Intent sendIntent;
 
 		sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.sendMail_subject));
 		sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.sendMail_body));
-		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + fileName));
+		if (file.exists())
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + fileName));
+		else
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY + "/" + fileName));
 		sendIntent.setType("audio/mpeg");
 
 		context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.send_mail)));
@@ -163,7 +181,14 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 	
 	void startPlayExternal(String charSequence)
 	{
-		Uri intentUri = Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + charSequence);
+		String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
+    	File file = new File(filepath, charSequence);
+    	Uri intentUri;
+    	
+    	if (file.exists())
+    		intentUri = Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + charSequence);
+    	else
+    		intentUri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY + "/" + charSequence);
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setDataAndType(intentUri, "audio/mpeg");
