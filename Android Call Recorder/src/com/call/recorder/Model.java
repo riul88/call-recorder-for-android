@@ -48,6 +48,5 @@ public class Model implements Comparable<Model> {
            Long date2 = Long.valueOf(another.getCallName().substring(1, 15));
            return (date2>date1 ? -1 : (date2==date1 ? 0 : 1));
     }
-   
-   
+    
 }

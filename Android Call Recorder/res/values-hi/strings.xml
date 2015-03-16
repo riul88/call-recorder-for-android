@@ -1,7 +1,6 @@
 <resources>
 
     <string name="app_name">Android के लिए फोन रिकॉर्डर</string>
-    <string name="hello_world">दुनिया नमस्कार!</string>
     <string name="menu_settings">सेटिंग्स</string>
     <string name="menu_about">के बारे में</string>
     <string name="menu_Enable_record">रिकॉर्ड सक्षम</string>

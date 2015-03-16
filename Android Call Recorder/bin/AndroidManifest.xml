@@ -21,7 +21,7 @@
         android:launchMode="singleInstance"
         android:taskAffinity=""
         android:excludeFromRecents="false"
-        android:debuggable="false">
+        android:allowBackup="false">
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >

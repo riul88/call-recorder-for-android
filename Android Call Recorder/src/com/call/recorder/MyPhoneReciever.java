@@ -22,69 +22,69 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 
 
 public class MyPhoneReciever extends BroadcastReceiver {
 	
-	public static final String LISTEN_ENABLED = "ListenEnabled";
-	public static final String FILE_DIRECTORY = "recordedCalls";
 	private String phoneNumber;
-	public static final int STATE_INCOMING_NUMBER = 0;
-	public static final int STATE_CALL_START = 1;
-	public static final int STATE_CALL_END = 2;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		
-		SharedPreferences settings = context.getSharedPreferences(LISTEN_ENABLED, 0);
+		Log.d("Call recorder: ", "MyPhoneReciever.onReceive");
+		SharedPreferences settings = context.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
 		boolean silent = settings.getBoolean("silentMode", true);
 		phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 		
-		
-		if (silent && MainActivity.updateExternalStorageState() == MainActivity.MEDIA_MOUNTED)
+		Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+		String extraState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+		Log.d("Call recorder: ", "extraState "+((extraState!=null)?extraState:""));
+
+		if (silent && MainActivity.updateExternalStorageState() == Constants.MEDIA_MOUNTED)
 		{
-			if (phoneNumber == null)
-			{
-				if (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) 
+			try{
+				if (phoneNumber == null)
+				{
+					if (extraState.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) 
+					{
+						if (phoneNumber == null)
+							phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+						Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+						Intent myIntent = new Intent(context, RecordService.class);
+						myIntent.putExtra("commandType", Constants.STATE_CALL_START);
+						myIntent.putExtra("phoneNumber",  phoneNumber);
+						context.startService(myIntent);
+					}
+					else if (extraState.equals(TelephonyManager.EXTRA_STATE_IDLE)) 
+					{
+						Intent myIntent = new Intent(context, RecordService.class);
+						myIntent.putExtra("commandType", Constants.STATE_CALL_END);
+						context.startService(myIntent);
+					}
+					else if (extraState.equals(TelephonyManager.EXTRA_STATE_RINGING)) 
+					{
+						if (phoneNumber == null)
+							phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
+						Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+						Intent myIntent = new Intent(context, RecordService.class);
+						myIntent.putExtra("commandType", Constants.STATE_INCOMING_NUMBER);
+						myIntent.putExtra("phoneNumber",  phoneNumber);
+						context.startService(myIntent);
+					}
+				}
+				else
 				{
 					Intent myIntent = new Intent(context, RecordService.class);
-					myIntent.putExtra("commandType", STATE_CALL_START);
-					myIntent.putExtra("phoneNumber",  phoneNumber);
+					myIntent.putExtra("commandType", Constants.STATE_INCOMING_NUMBER);
+					myIntent.putExtra("phoneNumber", phoneNumber);
 					context.startService(myIntent);
 				}
-				else if (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_IDLE)) 
-				{
-					Intent myIntent = new Intent(context, RecordService.class);
-					myIntent.putExtra("commandType", STATE_CALL_END);
-					context.startService(myIntent);
-					
-					
-				}
-				else if (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_RINGING)) 
-				{
-					if (phoneNumber == null)
-						phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-					Intent myIntent = new Intent(context, RecordService.class);
-					myIntent.putExtra("commandType", STATE_INCOMING_NUMBER);
-					myIntent.putExtra("phoneNumber",  phoneNumber);
-					context.startService(myIntent);
-					
-				}
+			}catch(Exception e) {
+				Log.e("Call recorder: ", "Exception");
+				e.printStackTrace();
 			}
-			else
-			{
-				Intent myIntent = new Intent(context, RecordService.class);
-				myIntent.putExtra("commandType", TelephonyManager.EXTRA_INCOMING_NUMBER);
-				myIntent.putExtra("phoneNumber",  phoneNumber);
-				context.startService(myIntent);
-			}
-			
 		}
-		 
 	}
 	
-	
-
-
 }

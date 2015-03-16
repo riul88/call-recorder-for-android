@@ -19,22 +19,17 @@
 package com.call.recorder;
 
 import java.io.File;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
-
-
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,16 +41,12 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 
 	private final Context context;
 	private List<Model> list;
-	public static final String FILE_DIRECTORY = "recordedCalls";
-	
 	
 	public MyCallsAdapter(Context context, List<Model> list) {
 		super(context, R.layout.rowlayout, list);
 		this.list = list;
 		this.context = context;
 	}
-	
-	
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
@@ -95,9 +86,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 	/**
      * shows dialog of promotion tools
      */
-    public void showPromotionPieceDialog(final String fileName, final int position)
-    {
-    	
+    public void showPromotionPieceDialog(final String fileName, final int position) {
     	final CharSequence[] items = {context.getString(R.string.options_delete), context.getString(R.string.confirm_play), context.getString(R.string.confirm_send)};
     	
     	new AlertDialog.Builder (context)
@@ -117,22 +106,18 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
     	    	{
     	    		sendMail(fileName);
     	    	}
-    	    	
     	    }
     	})
     	.show();
-    	
-    	
     }
     
-    void DeleteRecord(final String fileName, final int position)
-    {
+    void DeleteRecord(final String fileName, final int position) {
     	new AlertDialog.Builder (context)
         .setTitle (R.string.confirm_delete_title)
         .setMessage (R.string.confirm_delete_text)
         .setPositiveButton (R.string.confirm_delete_yes, new DialogInterface.OnClickListener(){
             public void onClick (DialogInterface dialog, int whichButton){
-            	String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
+            	String filepath = FileHelper.getFilePath() + "/" + Constants.FILE_DIRECTORY;
             	File file = new File(filepath, fileName);
         		
         		if (file.exists()) {
@@ -141,7 +126,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
         			notifyDataSetChanged();
         		}
         		
-        		filepath = context.getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY;
+        		filepath = context.getFilesDir().getAbsolutePath() + "/" + Constants.FILE_DIRECTORY;
             	file = new File(filepath, fileName);
         		
         		if (file.exists()) {
@@ -153,16 +138,13 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
         })
         .setNegativeButton(R.string.confirm_delete_no, new DialogInterface.OnClickListener(){
             public void onClick (DialogInterface dialog, int whichButton){
-                
-                
             }
         })
         .show ();
     }
 	
-	void sendMail(String fileName)
-	{
-		String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
+	void sendMail(String fileName) {
+		String filepath = FileHelper.getFilePath() + "/" + Constants.FILE_DIRECTORY;
     	File file = new File(filepath, fileName);
 		
 		Intent sendIntent;
@@ -171,32 +153,30 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 		sendIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.sendMail_subject));
 		sendIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.sendMail_body));
 		if (file.exists())
-			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + fileName));
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + FileHelper.getFilePath() + "/" + Constants.FILE_DIRECTORY + "/" + fileName));
 		else
-			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY + "/" + fileName));
+			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + Constants.FILE_DIRECTORY + "/" + fileName));
 		sendIntent.setType("audio/mpeg");
 
 		context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.send_mail)));
 	}
 	
-	void startPlayExternal(String charSequence)
-	{
-		String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
+	void startPlayExternal(String charSequence) {
+		String filepath = FileHelper.getFilePath() + "/" + Constants.FILE_DIRECTORY;
     	File file = new File(filepath, charSequence);
     	Uri intentUri;
     	
     	if (file.exists())
-    		intentUri = Uri.parse("file://" + Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY + "/" + charSequence);
+    		intentUri = Uri.parse("file://" + FileHelper.getFilePath() + "/" + Constants.FILE_DIRECTORY + "/" + charSequence);
     	else
-    		intentUri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY + "/" + charSequence);
+    		intentUri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + Constants.FILE_DIRECTORY + "/" + charSequence);
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setDataAndType(intentUri, "audio/mpeg");
 		context.startActivity(intent);
 	}
 	
-	public void removeFromList(int position)
-	{
+	public void removeFromList(int position) {
 		list.remove(position);
 	}
 }

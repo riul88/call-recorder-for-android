@@ -1,7 +1,6 @@
 <resources>
 
     <string name="app_name">Call Recorder per Android</string>
-    <string name="hello_world">Ciao mondo!</string>
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_about">circa</string>
     <string name="menu_Enable_record">Abilita Record</string>

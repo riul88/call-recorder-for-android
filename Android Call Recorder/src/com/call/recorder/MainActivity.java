@@ -18,21 +18,11 @@
  */                                             
 package com.call.recorder;
 
-
-
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.ContactsContract;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -44,42 +34,35 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-
 
 public class MainActivity extends Activity {
-	
-	public static final String FILE_DIRECTORY = "recordedCalls";
 	public ListView listView;
 	//public ScrollView mScrollView;
 	public ScrollView mScrollView2;
 	public TextView mTextView;
-	public static final String LISTEN_ENABLED = "ListenEnabled";
 	private static final int CATEGORY_DETAIL = 1;
 	private static final int NO_MEMORY_CARD = 2;
 	private static final int TERMS = 3;
 	
-    public RadioButton radEnable;
+	public RadioButton radEnable;
     public RadioButton radDisable;
-        
-    public static final int MEDIA_MOUNTED = 0;
-    public static final int MEDIA_MOUNTED_READ_ONLY = 1;
-    public static final int NO_MEDIA = 2;
     
     private static Resources res;
     private Context context;
-	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +76,7 @@ public class MainActivity extends Activity {
         mScrollView2 = (ScrollView) findViewById(R.id.ScrollView02);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
         
-        SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
+        SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
         boolean silent = settings.getBoolean("silentMode", false);
         
         if (!silent)
@@ -105,26 +88,8 @@ public class MainActivity extends Activity {
     
     @Override
 	protected void onResume() {
-    	if (updateExternalStorageState() == MEDIA_MOUNTED) {
-	    	String filepath = Environment.getExternalStorageDirectory().getPath();
-	    	final File file = new File(filepath, FILE_DIRECTORY);
-					
-			if (!file.exists()) {
-				file.mkdirs();
-			}
-			
-			final List<Model> listDir = ListDir2(file);
-			
-			filepath = getFilesDir().getAbsolutePath();
-	    	final File file2 = new File(filepath, FILE_DIRECTORY);
-					
-			if (!file2.exists()) {
-				file2.mkdirs();
-			}
-			
-			final List<Model> listDir2 = ListDir2(file2);
-			
-			listDir.addAll(listDir2);
+    	if (updateExternalStorageState() == Constants.MEDIA_MOUNTED) {
+    		final List<Model> listDir = FileHelper.listFiles(this);
 			
 			if (listDir.isEmpty())
 			{
@@ -160,7 +125,7 @@ public class MainActivity extends Activity {
 	    	
 			listView.setAdapter(adapter);
     	}
-    	else if (updateExternalStorageState() == MEDIA_MOUNTED_READ_ONLY) {
+    	else if (updateExternalStorageState() == Constants.MEDIA_MOUNTED_READ_ONLY) {
     		mScrollView2.setVisibility(TextView.VISIBLE);
     		listView.setVisibility(ScrollView.GONE);
     		showDialog(NO_MEMORY_CARD);
@@ -173,8 +138,7 @@ public class MainActivity extends Activity {
     	super.onResume();
 	}
     
-    public static String getDataFromRawFiles(int id) throws IOException 
-    {
+    public static String getDataFromRawFiles(int id) throws IOException {
     	InputStream in_s = res.openRawResource(id);
 
         byte[] b = new byte[in_s.available()];
@@ -192,38 +156,13 @@ public class MainActivity extends Activity {
 	public static int updateExternalStorageState() {
 		String state = Environment.getExternalStorageState();
 		if (Environment.MEDIA_MOUNTED.equals(state)) {
-			return MEDIA_MOUNTED;
+			return Constants.MEDIA_MOUNTED;
 		} else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-			return MEDIA_MOUNTED_READ_ONLY;
+			return Constants.MEDIA_MOUNTED_READ_ONLY;
 		} else {
-			return NO_MEDIA;
+			return Constants.NO_MEDIA;
 		}
-
 	}
-    
-	/**
-	 * Fetches list of previous recordings
-	 * 
-	 * @param f
-	 * @return
-	 */
-	private List<Model> ListDir2(File f) {
-		File[] files = f.listFiles();
-		List<Model> fileList = new ArrayList<Model>();
-		for (File file : files) {
-			Model mModel = new Model(file.getName());
-			String phonenum = mModel.getCallName().substring(16,
-					mModel.getCallName().length() - 4);
-			mModel.setUserNameFromContact(getContactName(phonenum));
-			fileList.add(mModel);
-		}
-
-		Collections.sort(fileList);
-		Collections.sort(fileList, Collections.reverseOrder());
-
-		return fileList;
-	}
-    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -233,18 +172,16 @@ public class MainActivity extends Activity {
     
     @Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-    	SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
+    	SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
 		boolean silent = settings.getBoolean("silentMode", true);
 		
 		MenuItem menuDisableRecord = menu.findItem(R.id.menu_Disable_record);
 		MenuItem menuEnableRecord = menu.findItem(R.id.menu_Enable_record);
-		if (silent)
-		{
+		if (silent) {
 			menuDisableRecord.setEnabled(true);
 			menuEnableRecord.setEnabled(false);
 		}
-		else
-		{
+		else {
 			menuDisableRecord.setEnabled(false);
 			menuEnableRecord.setEnabled(true);
 		}
@@ -255,6 +192,7 @@ public class MainActivity extends Activity {
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
 		Toast toast;
+		final Activity currentActivity = this;
 		switch (item.getItemId()) {
             case R.id.menu_about:
             	AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -292,7 +230,8 @@ public class MainActivity extends Activity {
             	.setMessage(R.string.dialog_delete_all_content)
             	.setPositiveButton(R.string.dialog_delete_all_yes, new DialogInterface.OnClickListener() {
         			public void onClick(DialogInterface dialog, int id) {
-        				deleteAllRecords();
+        				FileHelper.deleteAllRecords(currentActivity);
+        				onResume();
         				dialog.cancel();
         			}
         		})
@@ -309,39 +248,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 	
-	private void deleteAllRecords()
-	{
-		String filepath = Environment.getExternalStorageDirectory().getPath() + "/" + FILE_DIRECTORY;
-		File file = new File(filepath);
-		
-		String listOfFileNames[] = file.list();
-		
-		for (int i = 0; i<listOfFileNames.length; i++)
-		{
-			File file2 = new File(filepath, listOfFileNames[i]);
-			if (file2.exists()) {
-				file2.delete();
-			}
-		}
-		
-		filepath = getFilesDir().getAbsolutePath() + "/" + FILE_DIRECTORY;
-		file = new File(filepath);
-		
-		String listOfFileNames2[] = file.list();
-		
-		for (int i = 0; i<listOfFileNames2.length; i++)
-		{
-			File file2 = new File(filepath, listOfFileNames2[i]);
-			if (file2.exists()) {
-				file2.delete();
-			}
-		}
-		
-		onResume();
-	}
-	
-	private void activateNotification()
-	{
+	private void activateNotification() {
 		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.ic_launcher,
 				"A new notification", System.currentTimeMillis());
@@ -358,9 +265,8 @@ public class MainActivity extends Activity {
 		notificationManager.notify(0, notification);
 	}
 	
-	private void setSharedPreferences(boolean settingsValue)
-	{
-		SharedPreferences settings = this.getSharedPreferences(LISTEN_ENABLED, 0);
+	private void setSharedPreferences(boolean settingsValue) {
+		SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("silentMode", settingsValue);
 		editor.commit();
@@ -399,8 +305,6 @@ public class MainActivity extends Activity {
                    }
             });
           categoryDetail = categoryDetailBuilder.create();
-         
-           
           
           return categoryDetail;
 		case TERMS:
@@ -427,8 +331,6 @@ public class MainActivity extends Activity {
 	        	  }
 	          });
 	          categoryDetail = categoryDetailBuilder.create();
-	         
-	           
 	          
 	          return categoryDetail;
 		default:
@@ -452,43 +354,4 @@ public class MainActivity extends Activity {
 		super.onPrepareDialog(id, dialog);
 	}
 	
-	/**
-	 * Obtains the contact list for the currently selected account.
-	 * 
-	 * @return A cursor for for accessing the contact list.
-	 */
-	private String getContactName(String phoneNum) {
-		String res = phoneNum;
-		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-		String[] projection = new String[] {
-				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-				ContactsContract.CommonDataKinds.Phone.NUMBER };
-		String selection = null;// =
-								// ContactsContract.CommonDataKinds.Phone.NUMBER
-								// + " = ?";
-		String[] selectionArgs = null;// = new String[] { "1111111" };
-		Cursor names = getContentResolver().query(uri, projection, selection,
-				selectionArgs, null);
-
-		int indexName = names
-				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-		int indexNumber = names
-				.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-		if (names.getCount() > 0) {
-			names.moveToFirst();
-			do {
-				String name = names.getString(indexName);
-				String number = names.getString(indexNumber)
-						.replaceAll("-", "");
-
-				if (number.compareTo(phoneNum) == 0) {
-					res = name;
-					break;
-				}
-
-			} while (names.moveToNext());
-		}
-
-		return res;
-	}
 }
