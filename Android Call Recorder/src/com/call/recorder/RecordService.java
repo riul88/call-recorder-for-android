@@ -145,8 +145,6 @@ public class RecordService extends Service {
 		} else if (commandType == Constants.STATE_CALL_END) {
 			Log.d(Constants.TAG, "RecordService STATE_CALL_END");
 			stopAndReleaseRecorder();
-			if (manager != null)
-				manager.cancel(0);
             finishService();
 		}
 		
@@ -164,6 +162,8 @@ public class RecordService extends Service {
 	}
 
     private void finishService(){
+    	if (manager != null)
+			manager.cancel(0);
         if(foregroundStarted) {
             stopForeground(true);
             foregroundStarted = false;
@@ -177,9 +177,8 @@ public class RecordService extends Service {
     }
 
 	private void stopAndReleaseRecorder() {
+        if(recorder == null) return;
         Log.d(Constants.TAG,"stopAndReleaseRecorder");
-        if(recorder != null)
-            return;
         boolean recorderStopped = false;
 
         try{

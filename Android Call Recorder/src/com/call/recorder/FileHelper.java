@@ -186,8 +186,8 @@ public class FileHelper {
 	}
 	
 	public static void deleteFile(String fileName){
-        Log.d(Constants.TAG, "deleteFile" + fileName);
-        if(fileName != null) return;
+        if(fileName == null) return;
+        Log.d(Constants.TAG, "deleteFile " + fileName);
 		try{
             File file = new File(fileName);
 
