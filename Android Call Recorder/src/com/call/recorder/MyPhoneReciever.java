@@ -32,14 +32,14 @@ public class MyPhoneReciever extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d("Call recorder: ", "MyPhoneReciever.onReceive");
+		Log.d(Constants.TAG, "MyPhoneReciever.onReceive");
 		SharedPreferences settings = context.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
 		boolean silent = settings.getBoolean("silentMode", true);
 		phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
 		
-		Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+		Log.d(Constants.TAG, "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
 		String extraState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-		Log.d("Call recorder: ", "extraState "+((extraState!=null)?extraState:""));
+		Log.d(Constants.TAG, "extraState "+((extraState!=null)?extraState:""));
 
 		if (silent && MainActivity.updateExternalStorageState() == Constants.MEDIA_MOUNTED)
 		{
@@ -50,7 +50,7 @@ public class MyPhoneReciever extends BroadcastReceiver {
 					{
 						if (phoneNumber == null)
 							phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-						Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+						Log.d(Constants.TAG, "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
 						Intent myIntent = new Intent(context, RecordService.class);
 						myIntent.putExtra("commandType", Constants.STATE_CALL_START);
 						myIntent.putExtra("phoneNumber",  phoneNumber);
@@ -66,7 +66,7 @@ public class MyPhoneReciever extends BroadcastReceiver {
 					{
 						if (phoneNumber == null)
 							phoneNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
-						Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+						Log.d(Constants.TAG, "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
 						Intent myIntent = new Intent(context, RecordService.class);
 						myIntent.putExtra("commandType", Constants.STATE_INCOMING_NUMBER);
 						myIntent.putExtra("phoneNumber",  phoneNumber);
@@ -81,7 +81,7 @@ public class MyPhoneReciever extends BroadcastReceiver {
 					context.startService(myIntent);
 				}
 			}catch(Exception e) {
-				Log.e("Call recorder: ", "Exception");
+				Log.e(Constants.TAG, "Exception");
 				e.printStackTrace();
 			}
 		}

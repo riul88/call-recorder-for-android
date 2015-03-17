@@ -19,6 +19,8 @@
 package com.call.recorder;
 
 public class Constants {
+    public static final String TAG = "Call recorder: ";
+
 	public static final String FILE_DIRECTORY = "recordedCalls";
 	public static final String LISTEN_ENABLED = "ListenEnabled";
 

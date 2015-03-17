@@ -58,7 +58,7 @@ public class FileHelper {
 			phoneNumber = phoneNumber.replace('*', '_');
 			
 		}catch(Exception e){
-			Log.d("Call recorder: ", "Exception");
+			Log.d(Constants.TAG, "Exception");
 			e.printStackTrace();
 		}
 		
@@ -185,16 +185,17 @@ public class FileHelper {
 		return listDir;
 	}
 	
-	public static void deleteFile(String myFileName){
+	public static void deleteFile(String fileName){
+        Log.d(Constants.TAG, "deleteFile" + fileName);
+        if(fileName != null) return;
 		try{
-			File file = new File(myFileName);
-			
-			if (file.exists()) {
-				file.delete();
-			}
-			Log.d("Call recorder: ", "File Deleted "+myFileName);
+            File file = new File(fileName);
+
+            if (file.exists()) {
+                file.delete();
+            }
 		}catch(Exception e){
-			Log.e("Call recorder: ", "Delete File Exception");
+			Log.e(Constants.TAG, "Exception");
 			e.printStackTrace();
 		}
 	}

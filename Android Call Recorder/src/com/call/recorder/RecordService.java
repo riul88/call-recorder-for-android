@@ -37,11 +37,10 @@ public class RecordService extends Service {
 
 	private MediaRecorder recorder = null;
 	private String phoneNumber = null;
-	private boolean recorderStarted = false;
-	private boolean recorderStopped = false;
-	
+
 	private NotificationManager manager;
-	private String myFileName;
+	private String fileName;
+    private boolean foregroundStarted = false;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -50,27 +49,42 @@ public class RecordService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d("Call recorder: ", "RecordService.onCreate");
+		Log.d(Constants.TAG, "RecordService.onCreate");
 		super.onCreate();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d("Call recorder: ", "RecordService.onStartCommand");
-		if(recorder == null){
-			recorder = new MediaRecorder();
-		}
+		Log.d(Constants.TAG, "RecordService.onStartCommand");
 		int commandType = intent.getIntExtra("commandType", Constants.STATE_INCOMING_NUMBER);
 		
-		if (commandType == Constants.STATE_INCOMING_NUMBER)
-		{
-			Log.d("Call recorder: ", "RecordService STATE_INCOMING_NUMBER");
+		if (commandType == Constants.STATE_INCOMING_NUMBER) {
+			Log.d(Constants.TAG, "RecordService STATE_INCOMING_NUMBER");
 			if (phoneNumber == null)
 				phoneNumber = intent.getStringExtra("phoneNumber");
-		}
-		else if (commandType == Constants.STATE_CALL_START)
-		{
-			Log.d("Call recorder: ", "RecordService STATE_CALL_START");
+
+            if(!foregroundStarted) {
+                if(recorder == null) {
+                    recorder = new MediaRecorder();
+                }
+
+                manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                Notification notification = new Notification(R.drawable.ic_launcher, this.getString(R.string.notification_ticker), System.currentTimeMillis());
+                notification.flags = Notification.FLAG_NO_CLEAR;
+
+                Intent intent2 = new Intent(this, MainActivity.class);
+                intent2.putExtra("RecordStatus", true);
+
+                PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, intent2, 0);
+                notification.setLatestEventInfo(this, this.getString(R.string.notification_title), this.getString(R.string.notification_text), contentIntent);
+                manager.notify(0, notification);
+
+                startForeground(1337, notification);
+                foregroundStarted = true;
+            }
+		} else if (commandType == Constants.STATE_CALL_START && recorder != null) {
+            boolean recorderStarted = false;
+			Log.d(Constants.TAG, "RecordService STATE_CALL_START");
 			if (phoneNumber == null)
 				phoneNumber = intent.getStringExtra("phoneNumber");
 
@@ -78,13 +92,13 @@ public class RecordService extends Service {
 				recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
 				recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 				recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-				myFileName = FileHelper.getFilename(phoneNumber);
-				recorder.setOutputFile(myFileName);
+				fileName = FileHelper.getFilename(phoneNumber);
+				recorder.setOutputFile(fileName);
 
 				OnErrorListener errorListener = new OnErrorListener() {
 					
 					public void onError(MediaRecorder arg0, int arg1, int arg2) {
-						Log.e("Call recorder: ", "OnErrorListener "+ arg1 + "," + arg2);
+						Log.e(Constants.TAG, "OnErrorListener "+ arg1 + "," + arg2);
 						terminateAndEraseFile();
 					}
 					
@@ -94,7 +108,7 @@ public class RecordService extends Service {
 				OnInfoListener infoListener = new OnInfoListener() {
 
 					public void onInfo(MediaRecorder arg0, int arg1, int arg2) {
-						Log.e("Call recorder: ", "OnInfoListener "+ arg1 + "," + arg2);
+						Log.e(Constants.TAG, "OnInfoListener "+ arg1 + "," + arg2);
 						terminateAndEraseFile();
 					}
 					
@@ -104,53 +118,36 @@ public class RecordService extends Service {
 				recorder.prepare();
 				//Sometimes prepare takes some time to complete
 				Thread.sleep(2000);
-				if(!recorderStarted){
-					recorder.start();
-					recorderStarted = true;
-				}
+                recorder.start();
+                recorderStarted = true;
 			} catch (IllegalStateException e) {
-				Log.e("Call recorder: ", "IllegalStateException");
+				Log.e(Constants.TAG, "IllegalStateException");
 				e.printStackTrace();
 				terminateAndEraseFile();
 			} catch (IOException e) {
-				Log.e("Call recorder: ", "IOException");
+				Log.e(Constants.TAG, "IOException");
+				e.printStackTrace();
+				terminateAndEraseFile();
+			} catch (Exception e) {
+				Log.e(Constants.TAG, "Exception");
 				e.printStackTrace();
 				terminateAndEraseFile();
 			}
-			catch (Exception e) {
-				Log.e("Call recorder: ", "Exception");
-				e.printStackTrace();
-				terminateAndEraseFile();
-			}
+
 			if(recorderStarted) {
 				Toast toast = Toast.makeText(this, this.getString(R.string.reciever_start_call), Toast.LENGTH_SHORT);
 		    	toast.show();
-		    	
-		    	manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		    	Notification notification = new Notification(R.drawable.ic_launcher, this.getString(R.string.notification_ticker), System.currentTimeMillis());
-		    	notification.flags = Notification.FLAG_NO_CLEAR;
-		    	
-		    	Intent intent2 = new Intent(this, MainActivity.class);
-		    	intent2.putExtra("RecordStatus", true);
 
-		        PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, intent2, 0);
-		        notification.setLatestEventInfo(this, this.getString(R.string.notification_title), this.getString(R.string.notification_text), contentIntent);
-		        manager.notify(0, notification);
-		        
-		        startForeground(1337, notification);
 			} else {
 				Toast toast = Toast.makeText(this, this.getString(R.string.record_impossible), Toast.LENGTH_LONG);
 		    	toast.show();
 			}
-		}
-		else if (commandType == Constants.STATE_CALL_END)
-		{
-			Log.d("Call recorder: ", "RecordService STATE_CALL_END");
-			stopRecorder();
+		} else if (commandType == Constants.STATE_CALL_END) {
+			Log.d(Constants.TAG, "RecordService STATE_CALL_END");
+			stopAndReleaseRecorder();
 			if (manager != null)
 				manager.cancel(0);
-			stopForeground(true);
-			this.stopSelf();
+            finishService();
 		}
 		
 		return super.onStartCommand(intent, flags, startId);
@@ -160,38 +157,54 @@ public class RecordService extends Service {
 	 * in case it is impossible to record
 	 */
 	private void terminateAndEraseFile() {
-		stopRecorder();
-		FileHelper.deleteFile(myFileName);
+        Log.d(Constants.TAG, "terminateAndEraseFile");
+		stopAndReleaseRecorder();
+        deleteFile();
+        finishService();
 	}
-	
-	private void stopRecorder() {
-		Log.d("Call recorder: ","stopRecorder");
-		try {
-			if(recorder != null){
-				if(recorderStarted){
-					recorder.stop();
-					recorderStarted = false;
-					recorderStopped = true;
-					Log.d("Call recorder: ","recorderStopped");
-				}
-				recorder.reset();
-				recorder.release();
-				recorder = null;
-			}
-			if(recorderStopped){
-				Toast toast = Toast.makeText(this, this.getString(R.string.reciever_end_call), Toast.LENGTH_SHORT);
-	    		toast.show();
-			}
-		} catch (IllegalStateException e) {
-			Log.e("Call recorder: ", "IllegalStateException");
-			e.printStackTrace();
-		}
+
+    private void finishService(){
+        if(foregroundStarted) {
+            stopForeground(true);
+            foregroundStarted = false;
+        }
+        this.stopSelf();
+    }
+
+    private void deleteFile(){
+        FileHelper.deleteFile(fileName);
+        fileName = null;
+    }
+
+	private void stopAndReleaseRecorder() {
+        Log.d(Constants.TAG,"stopAndReleaseRecorder");
+        if(recorder != null)
+            return;
+        boolean recorderStopped = false;
+
+        try{
+            recorder.stop();
+            recorderStopped = true;
+        }catch(IllegalStateException e) {
+            Log.e(Constants.TAG,"IllegalStateException");
+            deleteFile();
+        }catch(RuntimeException e){
+            Log.e(Constants.TAG,"RuntimeException");
+            deleteFile();
+        }
+        recorder.reset();
+        recorder.release();
+        recorder = null;
+        if(recorderStopped) {
+            Toast toast = Toast.makeText(this, this.getString(R.string.reciever_end_call), Toast.LENGTH_SHORT);
+            toast.show();
+        }
 	}
 
 	@Override
 	public void onDestroy() {
-		Log.d("Call recorder: ", "RecordService onDestroy");
-		stopRecorder();
+		Log.d(Constants.TAG, "RecordService onDestroy");
+		stopAndReleaseRecorder();
 		super.onDestroy();
 	}
 	
