@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.call.recorder"
-    android:versionCode="24"
-    android:versionName="2.0.3">
+    android:versionCode="25"
+    android:versionName="2.0.5">
 
     <uses-sdk
         android:targetSdkVersion="7" android:minSdkVersion="7" />
