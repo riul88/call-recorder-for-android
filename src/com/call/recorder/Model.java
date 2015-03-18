@@ -38,8 +38,7 @@ public class Model implements Comparable<Model> {
            this.callName = callName;
     }
 
-    public Model(String callName)
-    {
+    public Model(String callName) {
            this.callName = callName;
     }
 

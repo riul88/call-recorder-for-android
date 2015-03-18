@@ -56,8 +56,8 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 		final TextView textView = (TextView) rowView.findViewById(R.id.label_list);
 		final TextView textView2 = (TextView) rowView.findViewById(R.id.label_list_2);
 		//final ImageView imgDelete = (ImageView)rowView.findViewById(R.id.img_delete);
-		
-		String myDateStr = list.get(position).getCallName().substring(1, 15);
+        String getCallName = list.get(position).getCallName();
+		String myDateStr = getCallName.substring(1, 15);
 		SimpleDateFormat curFormater = new SimpleDateFormat("yyyyMMddkkmmss");
 		
 		Date dateObj = new Date();
@@ -67,7 +67,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 			e.printStackTrace();
 		} 
 		textView2.setText(DateFormat.getDateInstance().format(dateObj) + " " + DateFormat.getTimeInstance().format(dateObj));
-		String myPhone = list.get(position).getCallName().substring(16, list.get(position).getCallName().length() - 4);
+		String myPhone = getCallName.substring(16, getCallName.length() - 4);
 		
 		if (!myPhone.matches("^[\\d]{1,}$"))
 		{

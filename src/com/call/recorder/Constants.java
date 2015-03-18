@@ -19,10 +19,12 @@
 package com.call.recorder;
 
 public class Constants {
+
     public static final String TAG = "Call recorder: ";
 
 	public static final String FILE_DIRECTORY = "recordedCalls";
 	public static final String LISTEN_ENABLED = "ListenEnabled";
+    public static final String FILE_NAME_PATTERN = "^d[\\d]{14}p[_\\d]*\\.3gp$";
 
 	public static final int MEDIA_MOUNTED = 0;
 	public static final int MEDIA_MOUNTED_READ_ONLY = 1;
@@ -32,5 +34,7 @@ public class Constants {
 	public static final int STATE_CALL_START = 1;
 	public static final int STATE_CALL_END = 2;
 	public static final int EXTRA_INCOMING_NUMBER = 3;
+	
+	public static final int RECORDING_DISABLED = 4;
 
 }

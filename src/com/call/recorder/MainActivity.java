@@ -26,9 +26,6 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +34,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +64,7 @@ public class MainActivity extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	Log.d(Constants.TAG, "MainActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
@@ -76,11 +75,11 @@ public class MainActivity extends Activity {
         mScrollView2 = (ScrollView) findViewById(R.id.ScrollView02);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
         
-        SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
-        boolean silent = settings.getBoolean("silentMode", false);
+        //SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
+        //boolean silent = settings.getBoolean("silentMode", false);
         
-        if (!silent)
-        	showDialog(CATEGORY_DETAIL);
+        //if (!silent)
+        	//showDialog(CATEGORY_DETAIL);
         
         context = this.getBaseContext();
         //showDialog(TERMS);
@@ -88,16 +87,14 @@ public class MainActivity extends Activity {
     
     @Override
 	protected void onResume() {
+    	Log.d(Constants.TAG, "MainActivity onResume");
     	if (updateExternalStorageState() == Constants.MEDIA_MOUNTED) {
     		final List<Model> listDir = FileHelper.listFiles(this);
 			
-			if (listDir.isEmpty())
-			{
+			if (listDir.isEmpty()) {
 				mScrollView2.setVisibility(TextView.VISIBLE);
 				listView.setVisibility(ScrollView.GONE);
-			}
-			else
-			{
+			} else {
 				mScrollView2.setVisibility(TextView.GONE);
 				listView.setVisibility(ScrollView.VISIBLE);
 			}
@@ -105,7 +102,6 @@ public class MainActivity extends Activity {
 	    	final MyCallsAdapter adapter = new MyCallsAdapter(this, listDir);
 	    	
 			listView.setOnItemClickListener(new OnItemClickListener() {
-	
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
 					adapter.showPromotionPieceDialog(listDir.get(position)
@@ -114,18 +110,15 @@ public class MainActivity extends Activity {
 			});
 			
 			adapter.sort(new Comparator<Model>() {
-	
 				public int compare(Model arg0, Model arg1) {
 					Long date1 = Long.valueOf(arg0.getCallName().substring(1, 15));
 					Long date2 = Long.valueOf(arg1.getCallName().substring(1, 15));
 					return (date1 > date2 ? -1 : (date1 == date2 ? 0 : 1));
 				}
-	
 			});
 	    	
 			listView.setAdapter(adapter);
-    	}
-    	else if (updateExternalStorageState() == Constants.MEDIA_MOUNTED_READ_ONLY) {
+    	} else if (updateExternalStorageState() == Constants.MEDIA_MOUNTED_READ_ONLY) {
     		mScrollView2.setVisibility(TextView.VISIBLE);
     		listView.setVisibility(ScrollView.GONE);
     		showDialog(NO_MEMORY_CARD);
@@ -248,93 +241,101 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 	
-	private void activateNotification() {
-		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.ic_launcher,
-				"A new notification", System.currentTimeMillis());
-		// Hide the notification after its selected
-		notification.flags |= Notification.FLAG_ONGOING_EVENT;
-		notification.flags |= Notification.FLAG_NO_CLEAR;
-
-		Intent intent = new Intent(this, MainActivity.class);
-		PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
-		notification.setLatestEventInfo(this, "This is the title",
-				"This is the text", activity);
-		//notification.
-		//notification.number += 1;
-		notificationManager.notify(0, notification);
-	}
+//	private void activateNotification() {
+//		NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//		Notification notification = new Notification(R.drawable.ic_launcher,
+//				"A new notification", System.currentTimeMillis());
+//		// Hide the notification after its selected
+//		notification.flags |= Notification.FLAG_ONGOING_EVENT;
+//		notification.flags |= Notification.FLAG_NO_CLEAR;
+//
+//		Intent intent = new Intent(this, MainActivity.class);
+//		PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
+//		notification.setLatestEventInfo(this, "This is the title",
+//				"This is the text", activity);
+//		//notification.
+//		//notification.number += 1;
+//		notificationManager.notify(0, notification);
+//	}
 	
 	private void setSharedPreferences(boolean settingsValue) {
+		Log.d(Constants.TAG, "MainActivity setSharedPreferences");
 		SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("silentMode", settingsValue);
 		editor.commit();
+		
+		if(!settingsValue){
+			//Shutdown service
+			Intent myIntent = new Intent(context, RecordService.class);
+			myIntent.putExtra("commandType", Constants.RECORDING_DISABLED);
+			context.startService(myIntent);
+		}
 	}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
-		case CATEGORY_DETAIL:
-			LayoutInflater li = LayoutInflater.from(this);
-			View categoryDetailView = li.inflate(R.layout.startup_dialog_layout, null);
-
-			AlertDialog.Builder categoryDetailBuilder = new AlertDialog.Builder(this);
-			categoryDetailBuilder.setTitle(this.getString(R.string.dialog_welcome_screen));
-			categoryDetailBuilder.setView(categoryDetailView);
-			AlertDialog categoryDetail = categoryDetailBuilder.create();
-
-			categoryDetail.setButton2("OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					if (radEnable.isChecked())
-						setSharedPreferences(true);
-					if (radDisable.isChecked())
-						setSharedPreferences(false);
-				}});
-
-			return categoryDetail;
-		case NO_MEMORY_CARD:
-            li = LayoutInflater.from(this);
-         
-          categoryDetailBuilder = new AlertDialog.Builder(this);
-          categoryDetailBuilder.setMessage(R.string.dialog_no_memory);
-          categoryDetailBuilder.setCancelable(false);
-          categoryDetailBuilder.setPositiveButton(this.getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
-                         dialog.cancel();
-                   }
-            });
-          categoryDetail = categoryDetailBuilder.create();
-          
-          return categoryDetail;
-		case TERMS:
-			li = LayoutInflater.from(this);
+			case CATEGORY_DETAIL:
+				LayoutInflater li = LayoutInflater.from(this);
+				View categoryDetailView = li.inflate(R.layout.startup_dialog_layout, null);
+	
+				AlertDialog.Builder categoryDetailBuilder = new AlertDialog.Builder(this);
+				categoryDetailBuilder.setTitle(this.getString(R.string.dialog_welcome_screen));
+				categoryDetailBuilder.setView(categoryDetailView);
+				AlertDialog categoryDetail = categoryDetailBuilder.create();
+	
+				categoryDetail.setButton2("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (radEnable.isChecked())
+							setSharedPreferences(true);
+						if (radDisable.isChecked())
+							setSharedPreferences(false);
+					}});
+	
+				return categoryDetail;
+			case NO_MEMORY_CARD:
+	            li = LayoutInflater.from(this);
 	         
 	          categoryDetailBuilder = new AlertDialog.Builder(this);
-	          categoryDetailBuilder.setMessage(this.getString(R.string.dialog_privacy_terms));
+	          categoryDetailBuilder.setMessage(R.string.dialog_no_memory);
 	          categoryDetailBuilder.setCancelable(false);
-	          categoryDetailBuilder.setPositiveButton(this.getString(R.string.dialog_terms), new DialogInterface.OnClickListener() {
-	        	  public void onClick(DialogInterface dialog, int id) {
-	        		  Intent i = new Intent(context, TermsActivity.class);
-	          		  startActivity(i);
-	        	  }
-	          });
-	          categoryDetailBuilder.setNegativeButton(this.getString(R.string.dialog_privacy), new DialogInterface.OnClickListener() {
-	        	  public void onClick(DialogInterface dialog, int id) {
-	        		  Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.privacychoice.org/policy/mobile?policy=306ef01761f300e3c30ccfc534babf6b"));
-	              	  startActivity(browserIntent);
-	        	  }
-	          });
-	          categoryDetailBuilder.setNeutralButton(this.getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
-	        	  public void onClick(DialogInterface dialog, int id) {
-	        		  dialog.cancel();
-	        	  }
-	          });
+	          categoryDetailBuilder.setPositiveButton(this.getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                         dialog.cancel();
+	                   }
+	            });
 	          categoryDetail = categoryDetailBuilder.create();
 	          
 	          return categoryDetail;
-		default:
-			break;
+			case TERMS:
+				li = LayoutInflater.from(this);
+		         
+		          categoryDetailBuilder = new AlertDialog.Builder(this);
+		          categoryDetailBuilder.setMessage(this.getString(R.string.dialog_privacy_terms));
+		          categoryDetailBuilder.setCancelable(false);
+		          categoryDetailBuilder.setPositiveButton(this.getString(R.string.dialog_terms), new DialogInterface.OnClickListener() {
+		        	  public void onClick(DialogInterface dialog, int id) {
+		        		  Intent i = new Intent(context, TermsActivity.class);
+		          		  startActivity(i);
+		        	  }
+		          });
+		          categoryDetailBuilder.setNegativeButton(this.getString(R.string.dialog_privacy), new DialogInterface.OnClickListener() {
+		        	  public void onClick(DialogInterface dialog, int id) {
+		        		  Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.privacychoice.org/policy/mobile?policy=306ef01761f300e3c30ccfc534babf6b"));
+		              	  startActivity(browserIntent);
+		        	  }
+		          });
+		          categoryDetailBuilder.setNeutralButton(this.getString(R.string.dialog_close), new DialogInterface.OnClickListener() {
+		        	  public void onClick(DialogInterface dialog, int id) {
+		        		  dialog.cancel();
+		        	  }
+		          });
+		          categoryDetail = categoryDetailBuilder.create();
+		          
+		          return categoryDetail;
+			default:
+				break;
 		}
 		return null;
 	}
@@ -342,14 +343,14 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch (id) {
-		case CATEGORY_DETAIL:
-			AlertDialog categoryDetail = (AlertDialog)dialog;
-			radEnable = (RadioButton)categoryDetail.findViewById(R.id.radio_Enable_record);
-			radDisable = (RadioButton)categoryDetail.findViewById(R.id.radio_Disable_record);
-			radEnable.setChecked(true);
-			break;
-		default:
-			break;
+			case CATEGORY_DETAIL:
+				AlertDialog categoryDetail = (AlertDialog)dialog;
+				radEnable = (RadioButton)categoryDetail.findViewById(R.id.radio_Enable_record);
+				radDisable = (RadioButton)categoryDetail.findViewById(R.id.radio_Disable_record);
+				radEnable.setChecked(true);
+				break;
+			default:
+				break;
 		}
 		super.onPrepareDialog(id, dialog);
 	}

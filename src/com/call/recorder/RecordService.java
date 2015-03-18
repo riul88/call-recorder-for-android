@@ -49,14 +49,24 @@ public class RecordService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d(Constants.TAG, "RecordService.onCreate");
+		Log.d(Constants.TAG, "RecordService onCreate");
 		super.onCreate();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(Constants.TAG, "RecordService.onStartCommand");
+		Log.d(Constants.TAG, "RecordService onStartCommand");
+		if(intent==null){
+			Log.d(Constants.TAG, "intent is null");
+			return super.onStartCommand(intent, flags, startId);
+		}
 		int commandType = intent.getIntExtra("commandType", Constants.STATE_INCOMING_NUMBER);
+		
+		Log.d(Constants.TAG, "commandType "+commandType);
+		if(commandType == Constants.RECORDING_DISABLED && foregroundStarted){
+			Log.d(Constants.TAG, "RecordService RECORDING_DISABLED");
+			commandType = Constants.STATE_CALL_END;
+		}
 		
 		if (commandType == Constants.STATE_INCOMING_NUMBER) {
 			Log.d(Constants.TAG, "RecordService STATE_INCOMING_NUMBER");
@@ -81,10 +91,11 @@ public class RecordService extends Service {
 
                 startForeground(1337, notification);
                 foregroundStarted = true;
+                Log.d(Constants.TAG, "foregroundStarted");
             }
 		} else if (commandType == Constants.STATE_CALL_START && recorder != null) {
-            boolean recorderStarted = false;
 			Log.d(Constants.TAG, "RecordService STATE_CALL_START");
+			boolean recorderStarted = false;
 			if (phoneNumber == null)
 				phoneNumber = intent.getStringExtra("phoneNumber");
 
@@ -96,22 +107,18 @@ public class RecordService extends Service {
 				recorder.setOutputFile(fileName);
 
 				OnErrorListener errorListener = new OnErrorListener() {
-					
 					public void onError(MediaRecorder arg0, int arg1, int arg2) {
 						Log.e(Constants.TAG, "OnErrorListener "+ arg1 + "," + arg2);
 						terminateAndEraseFile();
 					}
-					
 				};
 				recorder.setOnErrorListener(errorListener);
 				
 				OnInfoListener infoListener = new OnInfoListener() {
-
 					public void onInfo(MediaRecorder arg0, int arg1, int arg2) {
 						Log.e(Constants.TAG, "OnInfoListener "+ arg1 + "," + arg2);
 						terminateAndEraseFile();
 					}
-					
 				};
 				recorder.setOnInfoListener(infoListener);
 
@@ -120,6 +127,7 @@ public class RecordService extends Service {
 				Thread.sleep(2000);
                 recorder.start();
                 recorderStarted = true;
+                Log.d(Constants.TAG, "recorderStarted");
 			} catch (IllegalStateException e) {
 				Log.e(Constants.TAG, "IllegalStateException");
 				e.printStackTrace();
@@ -137,7 +145,6 @@ public class RecordService extends Service {
 			if(recorderStarted) {
 				Toast toast = Toast.makeText(this, this.getString(R.string.reciever_start_call), Toast.LENGTH_SHORT);
 		    	toast.show();
-
 			} else {
 				Toast toast = Toast.makeText(this, this.getString(R.string.record_impossible), Toast.LENGTH_LONG);
 		    	toast.show();
@@ -147,7 +154,6 @@ public class RecordService extends Service {
 			stopAndReleaseRecorder();
             finishService();
 		}
-		
 		return super.onStartCommand(intent, flags, startId);
 	}
 	
@@ -155,30 +161,32 @@ public class RecordService extends Service {
 	 * in case it is impossible to record
 	 */
 	private void terminateAndEraseFile() {
-        Log.d(Constants.TAG, "terminateAndEraseFile");
+        Log.d(Constants.TAG, "RecordService terminateAndEraseFile");
 		stopAndReleaseRecorder();
         deleteFile();
         finishService();
 	}
 
     private void finishService(){
-    	if (manager != null)
-			manager.cancel(0);
-        if(foregroundStarted) {
+    	Log.d(Constants.TAG, "RecordService finishService");
+    	if(foregroundStarted) {
             stopForeground(true);
             foregroundStarted = false;
         }
+    	if (manager != null)
+			manager.cancel(0);
         this.stopSelf();
     }
 
     private void deleteFile(){
+    	Log.d(Constants.TAG, "RecordService deleteFile");
         FileHelper.deleteFile(fileName);
         fileName = null;
     }
 
 	private void stopAndReleaseRecorder() {
+		Log.d(Constants.TAG, "RecordService stopAndReleaseRecorder");
         if(recorder == null) return;
-        Log.d(Constants.TAG,"stopAndReleaseRecorder");
         boolean recorderStopped = false;
 
         try{

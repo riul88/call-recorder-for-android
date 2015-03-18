@@ -37,11 +37,13 @@ public class FileHelper {
 	 * returns absolute file directory
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
-	public static String getFilename(String phoneNumber) {
+	public static String getFilename(String phoneNumber) throws Exception {
 		String filepath = null;
 		String myDate = null;
 		File file = null;
+		if(phoneNumber == null) throw new Exception("Phone number can't be empty");
 		try{
 			filepath = getFilePath();
 		
@@ -54,7 +56,7 @@ public class FileHelper {
 			myDate = (String) DateFormat.format("yyyyMMddkkmmss", new Date());
 
 			//Clean characters in file name
-			Log.d("Call recorder: ", "phoneNumber "+((phoneNumber!=null)?phoneNumber:""));
+			Log.d("Call recorder: ", "phoneNumber "+phoneNumber);
 			phoneNumber = phoneNumber.replace('*', '_');
 			
 		}catch(Exception e){
@@ -148,10 +150,15 @@ public class FileHelper {
 		File[] files = f.listFiles();
 		List<Model> fileList = new ArrayList<Model>();
 		for (File file : files) {
+            if(!file.getName().matches(Constants.FILE_NAME_PATTERN)){
+            	Log.d(Constants.TAG, String.format("'%s' didn't match the file name pattern", file.getName()));
+                continue;
+            }
+
 			Model mModel = new Model(file.getName());
-			String phonenum = mModel.getCallName().substring(16,
+			String phoneNum = mModel.getCallName().substring(16,
 					mModel.getCallName().length() - 4);
-			mModel.setUserNameFromContact(getContactName(phonenum, caller));
+			mModel.setUserNameFromContact(getContactName(phoneNum, caller));
 			fileList.add(mModel);
 		}
 
