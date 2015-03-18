@@ -87,24 +87,23 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
      * shows dialog of promotion tools
      */
     public void showPromotionPieceDialog(final String fileName, final int position) {
-    	final CharSequence[] items = {context.getString(R.string.options_delete), context.getString(R.string.confirm_play), context.getString(R.string.confirm_send)};
+    	final CharSequence[] items = {
+    			context.getString(R.string.confirm_play),
+    			context.getString(R.string.confirm_send),
+    			context.getString(R.string.options_delete)
+			};
     	
     	new AlertDialog.Builder (context)
     	.setTitle(R.string.options_title)
     	.setItems(items, new DialogInterface.OnClickListener() {
     	    public void onClick(DialogInterface dialog, int item) {
-    	        if (item == 0)
-    	    	{
-    	        	DeleteRecord(fileName, position);
-    	    	}
-    	    	else if (item == 1)
-    	    	{
+    	        if (item == 0) {
     	    		//startPlay(fileName);
     	    		startPlayExternal(fileName);
-    	    	}
-    	    	else if (item == 2)
-    	    	{
+    	    	} else if (item == 1) {
     	    		sendMail(fileName);
+    	    	} else if (item == 2) {
+    	    		DeleteRecord(fileName, position);
     	    	}
     	    }
     	})
@@ -156,7 +155,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
 			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + FileHelper.getFilePath() + "/" + Constants.FILE_DIRECTORY + "/" + fileName));
 		else
 			sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + Constants.FILE_DIRECTORY + "/" + fileName));
-		sendIntent.setType("audio/mpeg");
+		sendIntent.setType("audio/3gpp");
 
 		context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.send_mail)));
 	}
@@ -172,7 +171,7 @@ public class MyCallsAdapter extends ArrayAdapter<Model> {
     		intentUri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/" + Constants.FILE_DIRECTORY + "/" + charSequence);
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_VIEW);
-		intent.setDataAndType(intentUri, "audio/mpeg");
+		intent.setDataAndType(intentUri, "audio/3gpp");
 		context.startActivity(intent);
 	}
 	

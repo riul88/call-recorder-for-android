@@ -15,7 +15,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Call recorder For Android.  If not, see <http://www.gnu.org/licenses/>
- */                                             
+ */
 package com.call.recorder;
 
 import java.io.IOException;
