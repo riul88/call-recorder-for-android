@@ -4,7 +4,7 @@ Adding some functionality to performed some validations that help properly dispo
 
 Changed to use base Android 2.2 (API 8)
 
-Tested on Android 4.1.2 device
+Tested on Android 4.1.2, 4.2.2 and 4.4.2
 
 This repository is maintained by Raul Robledo, the base code was developed by Kobi Krasnoff, and automatically exported from code.google.com/p/call-recorder-for-android into this repository.
 
@@ -19,6 +19,8 @@ In order to allow or disallow recordings open the main menu and choose enable/di
 Your 3gp files are located in the folder "recordedCalls" in your SD card or phone storage, you can transfer your recorded calls to your computer by conecting your phone to it with a USB cable. (Some operative systems might require a driver to properly navigate your phone files)
 
 The recording does not have a limit of time so be careful not to run out of space after a few long calls.
+
+Direct download of the apk: https://github.com/riul88/call-recorder-for-android/blob/master/bin/Android%20Call%20Recorder.apk
 
 Change log:
 2015-03-17
