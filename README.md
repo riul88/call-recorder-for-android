@@ -1,16 +1,8 @@
 # call-recorder-for-android
 
-Adding some functionality to performed some validations that help properly dispose the MediaRecorder and avoid app breaking. Moved default folder location to SD card.
-
-Changed to use base Android 2.2 (API 8)
-
-Tested on Android 4.1.2, 4.2.2 and 4.4.2
-
-This repository is maintained by Raul Robledo, the base code was developed by Kobi Krasnoff, and automatically exported from code.google.com/p/call-recorder-for-android into this repository.
-
-Note: For some reason Android will not properly clean references to MediaRecorder, that will stop the application to use MediaRecorder again until phone is rebooted.
-
 This android application allows you to record all incoming and outgoing calls from your phone. All your recorded calls are saved in 3gp files and can be sent from the application.
+
+You can enable/disable the recording during the call, or leave it enabled to record all the calls.
 
 The main application screen contains a list of all calls with details of phone numbers, date and time of a call. By selecting one of the items the application will provide you with 3 options: erase record, send record and play record.
 
@@ -22,7 +14,24 @@ The recording does not have a limit of time so be careful not to run out of spac
 
 Direct download of the apk: https://github.com/riul88/call-recorder-for-android/blob/master/bin/Android%20Call%20Recorder.apk
 
+Compatible with Android 2.2 (API 8) or above
+
+Tested on Android 4.1.2, 4.2.2 and 4.4.2
+
+Some devices with Android 4.4.2 and Android 5 are not able to start recording
+
+This repository is maintained by Raul Robledo, the base code was developed by Kobi Krasnoff, and automatically exported from code.google.com/p/call-recorder-for-android into this repository.
+
+Note: For some reason Android will not properly clean references to MediaRecorder, that will stop the application to use MediaRecorder again until phone is rebooted.
+
 Change log:
+2015-03-21
+- RecordService flow updated to allow stop and start recording during call
+- Added authors and contributors files
+
+2015-03-18
+- Removed unneeded Internet permission
+
 2015-03-17
 - Fixed random application breaking bug caused by Service was called with null intent
 - Fixed application breaking bug when other files exist on the recordedCalls folder
