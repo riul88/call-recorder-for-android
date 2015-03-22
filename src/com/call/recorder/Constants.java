@@ -30,11 +30,11 @@ public class Constants {
 	public static final int MEDIA_MOUNTED_READ_ONLY = 1;
 	public static final int NO_MEDIA = 2;
 
-	public static final int STATE_INCOMING_NUMBER = 0;
-	public static final int STATE_CALL_START = 1;
-	public static final int STATE_CALL_END = 2;
-	public static final int EXTRA_INCOMING_NUMBER = 3;
+	public static final int STATE_INCOMING_NUMBER = 1;
+	public static final int STATE_CALL_START = 2;
+	public static final int STATE_CALL_END = 3;
+	public static final int STATE_STOP_RECORDING = 4;
+	public static final int RECORDING_ENABLED = 5;
+	public static final int RECORDING_DISABLED = 6;
 	
-	public static final int RECORDING_DISABLED = 4;
-
 }

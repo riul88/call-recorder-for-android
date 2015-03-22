@@ -30,6 +30,7 @@ import android.media.MediaRecorder;
 import android.media.MediaRecorder.OnErrorListener;
 import android.media.MediaRecorder.OnInfoListener;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -40,7 +41,9 @@ public class RecordService extends Service {
 
 	private NotificationManager manager;
 	private String fileName;
-    private boolean foregroundStarted = false;
+    private boolean onCall = false;
+    private boolean recording = false;
+    private boolean silentMode = false;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -49,110 +52,63 @@ public class RecordService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.d(Constants.TAG, "RecordService onCreate");
 		super.onCreate();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(Constants.TAG, "RecordService onStartCommand");
-		if(intent==null){
+		if(intent==null) {
 			Log.d(Constants.TAG, "intent is null");
 			return super.onStartCommand(intent, flags, startId);
 		}
-		int commandType = intent.getIntExtra("commandType", Constants.STATE_INCOMING_NUMBER);
-		
-		Log.d(Constants.TAG, "commandType "+commandType);
-		if(commandType == Constants.RECORDING_DISABLED && foregroundStarted){
-			Log.d(Constants.TAG, "RecordService RECORDING_DISABLED");
-			commandType = Constants.STATE_CALL_END;
-		}
-		
-		if (commandType == Constants.STATE_INCOMING_NUMBER) {
-			Log.d(Constants.TAG, "RecordService STATE_INCOMING_NUMBER");
-			if (phoneNumber == null)
-				phoneNumber = intent.getStringExtra("phoneNumber");
-
-            if(!foregroundStarted) {
-                if(recorder == null) {
-                    recorder = new MediaRecorder();
-                }
-
-                manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                Notification notification = new Notification(R.drawable.ic_launcher, this.getString(R.string.notification_ticker), System.currentTimeMillis());
-                notification.flags = Notification.FLAG_NO_CLEAR;
-
-                Intent intent2 = new Intent(this, MainActivity.class);
-                intent2.putExtra("RecordStatus", true);
-
-                PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, intent2, 0);
-                notification.setLatestEventInfo(this, this.getString(R.string.notification_title), this.getString(R.string.notification_text), contentIntent);
-                manager.notify(0, notification);
-
-                startForeground(1337, notification);
-                foregroundStarted = true;
-                Log.d(Constants.TAG, "foregroundStarted");
-            }
-		} else if (commandType == Constants.STATE_CALL_START && recorder != null) {
-			Log.d(Constants.TAG, "RecordService STATE_CALL_START");
-			boolean recorderStarted = false;
-			if (phoneNumber == null)
-				phoneNumber = intent.getStringExtra("phoneNumber");
-
-			try {
-				recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
-				recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-				recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-				fileName = FileHelper.getFilename(phoneNumber);
-				recorder.setOutputFile(fileName);
-
-				OnErrorListener errorListener = new OnErrorListener() {
-					public void onError(MediaRecorder arg0, int arg1, int arg2) {
-						Log.e(Constants.TAG, "OnErrorListener "+ arg1 + "," + arg2);
-						terminateAndEraseFile();
-					}
-				};
-				recorder.setOnErrorListener(errorListener);
+		int commandType = intent.getIntExtra("commandType", 0);
+		if(commandType != 0){
+			Log.d(Constants.TAG, "RecordService commandType " + commandType);
+			if(commandType == Constants.RECORDING_ENABLED){
+				Log.d(Constants.TAG, "RecordService RECORDING_ENABLED");
+				silentMode = false;
+				if(onCall && phoneNumber != null && !recording)
+					commandType = Constants.STATE_CALL_START;
+			}
+			if(commandType == Constants.RECORDING_DISABLED){
+				Log.d(Constants.TAG, "RecordService RECORDING_DISABLED");
+				silentMode = true;
+				if(onCall && phoneNumber != null)
+					commandType = Constants.STATE_STOP_RECORDING;
+			}
+			if (commandType == Constants.STATE_INCOMING_NUMBER) {
+				startService();
+				Log.d(Constants.TAG, "RecordService STATE_INCOMING_NUMBER");
+				if (phoneNumber == null)
+					phoneNumber = intent.getStringExtra("phoneNumber");
 				
-				OnInfoListener infoListener = new OnInfoListener() {
-					public void onInfo(MediaRecorder arg0, int arg1, int arg2) {
-						Log.e(Constants.TAG, "OnInfoListener "+ arg1 + "," + arg2);
-						terminateAndEraseFile();
-					}
-				};
-				recorder.setOnInfoListener(infoListener);
-
-				recorder.prepare();
-				//Sometimes prepare takes some time to complete
-				Thread.sleep(2000);
-                recorder.start();
-                recorderStarted = true;
-                Log.d(Constants.TAG, "recorderStarted");
-			} catch (IllegalStateException e) {
-				Log.e(Constants.TAG, "IllegalStateException");
-				e.printStackTrace();
-				terminateAndEraseFile();
-			} catch (IOException e) {
-				Log.e(Constants.TAG, "IOException");
-				e.printStackTrace();
-				terminateAndEraseFile();
-			} catch (Exception e) {
-				Log.e(Constants.TAG, "Exception");
-				e.printStackTrace();
-				terminateAndEraseFile();
+				silentMode = intent.getBooleanExtra("silentMode", true);
+			} else if (commandType == Constants.STATE_CALL_START) {
+				Log.d(Constants.TAG, "RecordService STATE_CALL_START");
+				onCall = true;
+				
+				if(phoneNumber==null){
+					Log.d(Constants.TAG, "RecordService phoneNumber NULL");
+				} else {
+					Log.d(Constants.TAG, "RecordService phoneNumber " + phoneNumber);
+				}
+				
+				if(!silentMode && phoneNumber != null){
+					startRecording(intent);
+				}
+			} else if (commandType == Constants.STATE_CALL_END) {
+				Log.d(Constants.TAG, "RecordService STATE_CALL_END");
+				onCall = false;
+				phoneNumber = null;
+				stopAndReleaseRecorder();
+				recording = false;
+				finishService();
+			} else if (commandType == Constants.STATE_STOP_RECORDING) {
+				Log.d(Constants.TAG, "RecordService STATE_STOP_RECORDING");
+				stopAndReleaseRecorder();
+				recording = false;
 			}
-
-			if(recorderStarted) {
-				Toast toast = Toast.makeText(this, this.getString(R.string.reciever_start_call), Toast.LENGTH_SHORT);
-		    	toast.show();
-			} else {
-				Toast toast = Toast.makeText(this, this.getString(R.string.record_impossible), Toast.LENGTH_LONG);
-		    	toast.show();
-			}
-		} else if (commandType == Constants.STATE_CALL_END) {
-			Log.d(Constants.TAG, "RecordService STATE_CALL_END");
-			stopAndReleaseRecorder();
-            finishService();
 		}
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -163,18 +119,18 @@ public class RecordService extends Service {
 	private void terminateAndEraseFile() {
         Log.d(Constants.TAG, "RecordService terminateAndEraseFile");
 		stopAndReleaseRecorder();
+		recording = false;
         deleteFile();
-        finishService();
 	}
 
     private void finishService(){
     	Log.d(Constants.TAG, "RecordService finishService");
-    	if(foregroundStarted) {
-            stopForeground(true);
-            foregroundStarted = false;
-        }
-    	if (manager != null)
-			manager.cancel(0);
+    	stopForeground(true);
+        
+		Intent dialogIntent = new Intent(getBaseContext(), MainActivity.class);
+		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		getApplication().startActivity(dialogIntent);
+        
         this.stopSelf();
     }
 
@@ -212,7 +168,83 @@ public class RecordService extends Service {
 	public void onDestroy() {
 		Log.d(Constants.TAG, "RecordService onDestroy");
 		stopAndReleaseRecorder();
+		finishService();
 		super.onDestroy();
 	}
 	
+	private void startRecording(Intent intent){
+		Log.d(Constants.TAG, "RecordService startRecording");
+		
+		recorder = new MediaRecorder();
+
+		try {
+			recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_CALL);
+			recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+			recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+			fileName = FileHelper.getFilename(phoneNumber);
+			recorder.setOutputFile(fileName);
+
+			OnErrorListener errorListener = new OnErrorListener() {
+				public void onError(MediaRecorder arg0, int arg1, int arg2) {
+					Log.e(Constants.TAG, "OnErrorListener "+ arg1 + "," + arg2);
+					terminateAndEraseFile();
+				}
+			};
+			recorder.setOnErrorListener(errorListener);
+			
+			OnInfoListener infoListener = new OnInfoListener() {
+				public void onInfo(MediaRecorder arg0, int arg1, int arg2) {
+					Log.e(Constants.TAG, "OnInfoListener "+ arg1 + "," + arg2);
+					terminateAndEraseFile();
+				}
+			};
+			recorder.setOnInfoListener(infoListener);
+
+			recorder.prepare();
+			//Sometimes prepare takes some time to complete
+			Thread.sleep(2000);
+            recorder.start();
+            recording = true;
+            Log.d(Constants.TAG, "RecordService recorderStarted");
+		} catch (IllegalStateException e) {
+			Log.e(Constants.TAG, "IllegalStateException");
+			e.printStackTrace();
+			terminateAndEraseFile();
+		} catch (IOException e) {
+			Log.e(Constants.TAG, "IOException");
+			e.printStackTrace();
+			terminateAndEraseFile();
+		} catch (Exception e) {
+			Log.e(Constants.TAG, "Exception");
+			e.printStackTrace();
+			terminateAndEraseFile();
+		}
+
+		if(recording) {
+			Toast toast = Toast.makeText(this, this.getString(R.string.reciever_start_call), Toast.LENGTH_SHORT);
+	    	toast.show();
+		} else {
+			Toast toast = Toast.makeText(this, this.getString(R.string.record_impossible), Toast.LENGTH_LONG);
+	    	toast.show();
+		}
+	}
+	
+	private void startService(){
+		if(manager==null){
+	        Intent intent = new Intent(this, MainActivity.class);
+	        PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, intent, 0);
+	        
+	        Notification notification = new NotificationCompat.Builder(getBaseContext())
+		        .setContentTitle(this.getString(R.string.notification_title))
+		        .setTicker(this.getString(R.string.notification_ticker))
+		        .setContentText(this.getString(R.string.notification_text))
+		        .setSmallIcon(R.drawable.ic_launcher)
+		        .setContentIntent(pendingIntent)
+		        .setOngoing(true).getNotification();
+
+	        notification.flags = Notification.FLAG_NO_CLEAR;
+	        
+	        startForeground(1337, notification);
+		}
+	}
 }

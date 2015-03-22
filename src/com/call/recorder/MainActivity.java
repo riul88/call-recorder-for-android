@@ -75,14 +75,17 @@ public class MainActivity extends Activity {
         mScrollView2 = (ScrollView) findViewById(R.id.ScrollView02);
         mTextView = (TextView) findViewById(R.id.txtNoRecords);
         
-        //SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
-        //boolean silent = settings.getBoolean("silentMode", false);
+        SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
+        boolean silentMode = settings.getBoolean("silentMode", true);
         
         //if (!silent)
         	//showDialog(CATEGORY_DETAIL);
         
         context = this.getBaseContext();
         //showDialog(TERMS);
+        Intent myIntent = new Intent(context, RecordService.class);
+		myIntent.putExtra("commandType", silentMode?Constants.RECORDING_DISABLED:Constants.RECORDING_ENABLED);
+		context.startService(myIntent);
     }
     
     @Override
@@ -170,14 +173,10 @@ public class MainActivity extends Activity {
 		
 		MenuItem menuDisableRecord = menu.findItem(R.id.menu_Disable_record);
 		MenuItem menuEnableRecord = menu.findItem(R.id.menu_Enable_record);
-		if (silent) {
-			menuDisableRecord.setEnabled(true);
-			menuEnableRecord.setEnabled(false);
-		}
-		else {
-			menuDisableRecord.setEnabled(false);
-			menuEnableRecord.setEnabled(true);
-		}
+
+		//silent is disabled, disableRecord item must be disabled
+		menuDisableRecord.setEnabled(!silent);
+		menuEnableRecord.setEnabled(silent);
 		
 		return super.onPrepareOptionsMenu(menu);
 	}
@@ -199,12 +198,12 @@ public class MainActivity extends Activity {
         		.show();
             	break;
             case R.id.menu_Disable_record:
-            	setSharedPreferences(false);
+            	setSharedPreferences(true);
             	toast = Toast.makeText(this, this.getString(R.string.menu_record_is_now_disabled), Toast.LENGTH_SHORT);
 		    	toast.show();
             	break;
             case R.id.menu_Enable_record:
-            	setSharedPreferences(true);
+            	setSharedPreferences(false);
             	//activateNotification();
             	toast = Toast.makeText(this, this.getString(R.string.menu_record_is_now_enabled), Toast.LENGTH_SHORT);
 		    	toast.show();
@@ -258,19 +257,16 @@ public class MainActivity extends Activity {
 //		notificationManager.notify(0, notification);
 //	}
 	
-	private void setSharedPreferences(boolean settingsValue) {
+	private void setSharedPreferences(boolean silentMode) {
 		Log.d(Constants.TAG, "MainActivity setSharedPreferences");
 		SharedPreferences settings = this.getSharedPreferences(Constants.LISTEN_ENABLED, 0);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean("silentMode", settingsValue);
+		editor.putBoolean("silentMode", silentMode);
 		editor.commit();
 		
-		if(!settingsValue){
-			//Shutdown service
-			Intent myIntent = new Intent(context, RecordService.class);
-			myIntent.putExtra("commandType", Constants.RECORDING_DISABLED);
-			context.startService(myIntent);
-		}
+		Intent myIntent = new Intent(context, RecordService.class);
+		myIntent.putExtra("commandType", silentMode?Constants.RECORDING_DISABLED:Constants.RECORDING_ENABLED);
+		context.startService(myIntent);
 	}
 
 	@Override
@@ -288,9 +284,9 @@ public class MainActivity extends Activity {
 				categoryDetail.setButton2("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						if (radEnable.isChecked())
-							setSharedPreferences(true);
-						if (radDisable.isChecked())
 							setSharedPreferences(false);
+						if (radDisable.isChecked())
+							setSharedPreferences(true);
 					}});
 	
 				return categoryDetail;
