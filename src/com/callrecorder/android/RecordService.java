@@ -55,34 +55,37 @@ public class RecordService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(Constants.TAG, "RecordService onStartCommand");
 		if (intent != null) {
 			int commandType = intent.getIntExtra("commandType", 0);
 			if (commandType != 0) {
-				Log.d(Constants.TAG, "RecordService onStartCommand");
 				if (commandType == Constants.RECORDING_ENABLED) {
 					Log.d(Constants.TAG, "RecordService RECORDING_ENABLED");
-					silentMode = false;
-					if (onCall && phoneNumber != null && !recording)
-						commandType = Constants.STATE_CALL_START;
+					silentMode = intent.getBooleanExtra("silentMode", true);
+					if (!silentMode && phoneNumber != null && onCall
+							&& !recording)
+						commandType = Constants.STATE_START_RECORDING;
+
 				} else if (commandType == Constants.RECORDING_DISABLED) {
 					Log.d(Constants.TAG, "RecordService RECORDING_DISABLED");
-					silentMode = true;
-					if (onCall && phoneNumber != null)
+					silentMode = intent.getBooleanExtra("silentMode", true);
+					if (onCall && phoneNumber != null && recording)
 						commandType = Constants.STATE_STOP_RECORDING;
 				}
-				
+
 				if (commandType == Constants.STATE_INCOMING_NUMBER) {
-					startService();
 					Log.d(Constants.TAG, "RecordService STATE_INCOMING_NUMBER");
+					startService();
 					if (phoneNumber == null)
 						phoneNumber = intent.getStringExtra("phoneNumber");
-	
+
 					silentMode = intent.getBooleanExtra("silentMode", true);
 				} else if (commandType == Constants.STATE_CALL_START) {
 					Log.d(Constants.TAG, "RecordService STATE_CALL_START");
 					onCall = true;
-	
-					if (!silentMode && phoneNumber != null) {
+
+					if (!silentMode && phoneNumber != null && onCall
+							&& !recording) {
 						startService();
 						startRecording(intent);
 					}
@@ -93,6 +96,12 @@ public class RecordService extends Service {
 					stopAndReleaseRecorder();
 					recording = false;
 					stopService();
+				} else if (commandType == Constants.STATE_START_RECORDING) {
+					Log.d(Constants.TAG, "RecordService STATE_START_RECORDING");
+					if (!silentMode && phoneNumber != null && onCall) {
+						startService();
+						startRecording(intent);
+					}
 				} else if (commandType == Constants.STATE_STOP_RECORDING) {
 					Log.d(Constants.TAG, "RecordService STATE_STOP_RECORDING");
 					stopAndReleaseRecorder();

@@ -32,8 +32,9 @@ public class Constants {
 	public static final int STATE_INCOMING_NUMBER = 1;
 	public static final int STATE_CALL_START = 2;
 	public static final int STATE_CALL_END = 3;
-	public static final int STATE_STOP_RECORDING = 4;
-	public static final int RECORDING_ENABLED = 5;
-	public static final int RECORDING_DISABLED = 6;
+	public static final int STATE_START_RECORDING = 4;
+	public static final int STATE_STOP_RECORDING = 5;
+	public static final int RECORDING_ENABLED = 6;
+	public static final int RECORDING_DISABLED = 7;
 
 }

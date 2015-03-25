@@ -78,7 +78,8 @@ public class MainActivity extends Activity {
 				Constants.LISTEN_ENABLED, 0);
 		boolean silentMode = settings.getBoolean("silentMode", true);
 
-		if (silentMode) showDialog(CATEGORY_DETAIL);
+		if (silentMode)
+			showDialog(CATEGORY_DETAIL);
 
 		context = this.getBaseContext();
 		// showDialog(TERMS);
@@ -281,6 +282,7 @@ public class MainActivity extends Activity {
 		myIntent.putExtra("commandType",
 				silentMode ? Constants.RECORDING_DISABLED
 						: Constants.RECORDING_ENABLED);
+		myIntent.putExtra("silentMode", silentMode);
 		context.startService(myIntent);
 	}
 
