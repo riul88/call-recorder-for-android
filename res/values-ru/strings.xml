@@ -9,8 +9,8 @@
     <string name="list_play_your_recordeed_call">play your recorded call</string>
 	<string name="list_send_your_recordeed_call">send your recorded call</string>
 	<string name="list_erase_your_recordeed_call">erase your recorded call</string>
-	<string name="reciever_start_call">Начало записи вызова</string>
-	<string name="reciever_end_call">Конец записи вызова</string>
+	<string name="receiver_start_call">Начало записи вызова</string>
+	<string name="receiver_end_call">Конец записи вызова</string>
 	<string name="confirm_delete_title">Сигнал Диалог</string>
 	<string name="confirm_delete_text">Вы уверены, что хотите удалить эту запись?</string>
 	<string name="confirm_delete_yes">да</string>

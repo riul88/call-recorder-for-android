@@ -9,8 +9,8 @@
     <string name="list_play_your_recordeed_call">jouer votre appel enregistré</string>
 	<string name="list_send_your_recordeed_call">envoyer votre appel enregistré</string>
 	<string name="list_erase_your_recordeed_call">effacer votre appel enregistré</string>
-	<string name="reciever_start_call">Démarrer la fiche</string>
-	<string name="reciever_end_call">Fin de la communication enregistrement</string>
+	<string name="receiver_start_call">Démarrer la fiche</string>
+	<string name="receiver_end_call">Fin de la communication enregistrement</string>
 	<string name="confirm_delete_title">Alerte de dialogue</string>
 	<string name="confirm_delete_text">Êtes-vous sûr de vouloir supprimer cet enregistrement?</string>
 	<string name="confirm_delete_yes">oui</string>

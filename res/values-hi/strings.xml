@@ -9,8 +9,8 @@
     <string name="list_play_your_recordeed_call">अपने दर्ज की गई कॉल खेलने</string>
 	<string name="list_send_your_recordeed_call">अपने रिकॉर्ड कॉल भेजने</string>
 	<string name="list_erase_your_recordeed_call">अपने दर्ज की गई कॉल को मिटा</string>
-	<string name="reciever_start_call">रिकॉर्ड कॉल प्रारंभ</string>
-	<string name="reciever_end_call">रिकॉर्ड कॉल समाप्त</string>
+	<string name="receiver_start_call">रिकॉर्ड कॉल प्रारंभ</string>
+	<string name="receiver_end_call">रिकॉर्ड कॉल समाप्त</string>
 	<string name="confirm_delete_title">संवाद चेतावनी</string>
 	<string name="confirm_delete_text">क्या आप सुनिश्चित करें कि आप इस रिकॉर्डिंग को नष्ट करना चाहते हैं?</string>
 	<string name="confirm_delete_yes">हां</string>

@@ -9,8 +9,8 @@
     <string name="list_play_your_recordeed_call">giocare la chiamata registrata</string>
 	<string name="list_send_your_recordeed_call">inviare la chiamata registrata</string>
 	<string name="list_erase_your_recordeed_call">cancellare la chiamata registrata</string>
-	<string name="reciever_start_call">Avvia una chiamata di registrazione</string>
-	<string name="reciever_end_call">Terminare la chiamata di registrazione</string>
+	<string name="receiver_start_call">Avvia una chiamata di registrazione</string>
+	<string name="receiver_end_call">Terminare la chiamata di registrazione</string>
 	<string name="confirm_delete_title">Alert di dialogo</string>
 	<string name="confirm_delete_text">Sei sicuro di voler cancellare questa registrazione?</string>
 	<string name="confirm_delete_yes">sì</string>

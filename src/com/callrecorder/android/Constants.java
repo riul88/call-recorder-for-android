@@ -1,5 +1,4 @@
 /*
- *  Copyright 2012 Kobi Krasnoff
  * 
  * This file is part of Call recorder For Android.
 
@@ -16,15 +15,15 @@
     You should have received a copy of the GNU General Public License
     along with Call recorder For Android.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.call.recorder;
+package com.callrecorder.android;
 
 public class Constants {
 
-    public static final String TAG = "Call recorder: ";
+	public static final String TAG = "Call recorder: ";
 
 	public static final String FILE_DIRECTORY = "recordedCalls";
 	public static final String LISTEN_ENABLED = "ListenEnabled";
-    public static final String FILE_NAME_PATTERN = "^d[\\d]{14}p[_\\d]*\\.3gp$";
+	public static final String FILE_NAME_PATTERN = "^d[\\d]{14}p[_\\d]*\\.3gp$";
 
 	public static final int MEDIA_MOUNTED = 0;
 	public static final int MEDIA_MOUNTED_READ_ONLY = 1;
@@ -36,5 +35,5 @@ public class Constants {
 	public static final int STATE_STOP_RECORDING = 4;
 	public static final int RECORDING_ENABLED = 5;
 	public static final int RECORDING_DISABLED = 6;
-	
+
 }

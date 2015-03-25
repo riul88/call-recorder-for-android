@@ -9,8 +9,8 @@
     <string name="list_play_your_recordeed_call">play your recorded call</string>
 	<string name="list_send_your_recordeed_call">send your recorded call</string>
 	<string name="list_erase_your_recordeed_call">erase your recorded call</string>
-	<string name="reciever_start_call">מתחיל הקלטה</string>
-	<string name="reciever_end_call">מסיים הקלטה</string>
+	<string name="receiver_start_call">מתחיל הקלטה</string>
+	<string name="receiver_end_call">מסיים הקלטה</string>
 	<string name="confirm_delete_title">מסך התראה</string>
 	<string name="confirm_delete_text">האם אתה בטוח שברצונך למחוק הקלטה זאת?</string>
 	<string name="confirm_delete_yes">כן</string>
